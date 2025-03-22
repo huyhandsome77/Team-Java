@@ -1,73 +1,55 @@
 package uth.edu.jpa.models;
 import jakarta.persistence.*;
+
 @Entity
-@Table (name="sanbong")
-public class sanbong {
+@Table(name = "Fields")
+public class Field {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String name;
     private String location;
-    private Double pricePerHour;
-    private Boolean isAvailable;
-    public sanbong() {}
-    public sanbong(String name, String location, Double pricePerHour, Boolean isAvailable) {
+    private double pricePerHour;
+    private boolean available;
+
+    // Constructors
+    public Field() {}
+
+    public Field(String name, String location, double pricePerHour, boolean available) {
         this.name = name;
         this.location = location;
         this.pricePerHour = pricePerHour;
-        this.isAvailable = isAvailable;
+        this.available = available;
     }
+    // Getters và Setters
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public String getLocation() {
         return location;
     }
-
     public void setLocation(String location) {
         this.location = location;
     }
-
-    public Double getPricePerHour() {
+    public double getPricePerHour() {
         return pricePerHour;
     }
-
-    public void setPricePerHour(Double pricePerHour) {
+    public void setPricePerHour(double pricePerHour) {
         this.pricePerHour = pricePerHour;
     }
-
-    public Boolean getIsAvailable() {
-        return isAvailable;
+    public boolean getAvailable() {
+        return available;
     }
-
-    public void setIsAvailable(Boolean isAvailable) {
-        this.isAvailable = isAvailable;
-    }
-
-    @Override
-    public String toString() {
-        return "sanbong{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", location='" + location + '\'' +
-                ", pricePerHour=" + pricePerHour +
-                ", isAvailable=" + isAvailable +
-                '}';
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
-

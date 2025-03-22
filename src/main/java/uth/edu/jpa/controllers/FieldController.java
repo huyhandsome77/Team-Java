@@ -16,6 +16,7 @@ public class FieldController {
     @Autowired
     private FieldService fieldService;
 
+
     // Lấy danh sách tất cả các Field
     @GetMapping
     public List<Field> getAllFields() {
@@ -39,8 +40,8 @@ public class FieldController {
     // Cập nhật thông tin một Field
     @PutMapping("/{id}")
     public ResponseEntity<Field> updateField(@PathVariable Long id, @RequestBody Field fieldDetails) {
-        Optional<Field> updatedField = fieldService.updateField(id, fieldDetails);
-        return updatedField.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Field updatedField = fieldService.updateField(id, fieldDetails);
+        return updatedField != null ? ResponseEntity.ok(updatedField) : ResponseEntity.notFound().build();
     }
 
     // Xóa một Field theo ID
