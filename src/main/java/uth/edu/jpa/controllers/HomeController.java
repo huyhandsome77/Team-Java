@@ -5,8 +5,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping("/home")
-    public String HomePage() {
-        return "home"; // gọi đến html page
+    @GetMapping("/player")
+    public String PlayerDashboardPage() {
+        return "player/Player_Dashboard"; // gọi đến html page
     }
+    @GetMapping("/datsan")
+    public String PlayerDatSanPage() {
+        return "player/Player_DatSan"; // gọi đến html page
+    }
+
 }
+
+
