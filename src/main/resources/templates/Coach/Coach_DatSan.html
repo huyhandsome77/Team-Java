@@ -1,0 +1,68 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Sân</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+<div class="flex h-screen">
+    <!-- Sidebar -->
+
+
+
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between p-6 bg-white shadow-md">
+            <div class="relative w-1/2">
+                <input type="text" placeholder="Search..." class="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600">
+                <i class="fas fa-search absolute top-3 left-3 text-gray-500"></i>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-700">Star</span>
+                <div class="relative">
+                    <img src="https://storage.googleapis.com/a1aa/image/Pwn5QhTGZWPgGPV7GGPOmi7qBQDD9-FGd-ZXLmPaSfc.jpg" alt="User avatar" class="w-10 h-10 rounded-full">
+                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                </div>
+            </div>
+        </header>
+        <!-- Main section -->
+        <main class="flex-1 p-6">
+            <h1 class="text-2xl font-semibold text-gray-800">Đặt Sân</h1>
+            <form class="mt-6 space-y-4">
+                <div>
+                    <label for="date" class="block text-gray-700">Chọn Ngày:</label>
+                    <input type="date" id="date" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+                </div>
+                <div>
+                    <label for="time" class="block text-gray-700">Chọn Giờ:</label>
+                    <input type="time" id="time" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+                </div>
+                <div>
+                    <label for="court" class="block text-gray-700">Chọn Sân:</label>
+                    <select id="court" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
+                        <option value="court1">Sân 1</option>
+                        <option value="court2">Sân 2</option>
+                        <option value="court3">Sân 3</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600">Đặt Sân</button>
+            </form>
+        </main>
+        <!-- Footer -->
+        <footer class="p-6 bg-white shadow-md">
+            <div class="flex justify-between text-gray-500">
+                <span>© 2025, made with <i class="fas fa-heart text-red-500"></i> by <a href="#" class="text-purple-600">ThemeSelection</a></span>
+                <div class="space-x-4">
+                    <a href="#" class="text-purple-600">License</a>
+                    <a href="#" class="text-purple-600">More Themes</a>
+                    <a href="#" class="text-purple-600">Documentation</a>
+                    <a href="#" class="text-purple-600">Support</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+</body>
+</html>
