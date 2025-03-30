@@ -109,8 +109,9 @@
 }
 
 .text-primary {
-  color: #696cff !important;
+  color: black !important;
 }
+
 
 .text-body[href]:hover,
 .text-heading[href]:hover {
@@ -849,7 +850,7 @@ html:not(.layout-menu-collapsed) .bg-menu-theme .menu-inner .menu-item .menu-lin
   color: #646e78;
 }
 .bg-footer-theme .footer-link {
-  color: #696cff;
+  color: #000000;
 }
 .bg-footer-theme .footer-link:hover, .bg-footer-theme .footer-link:focus {
   color: #696cff;

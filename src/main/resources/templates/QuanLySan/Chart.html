@@ -1,34 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="master/head::head">
-
-</head>
+<head th:replace="master/head::head"></head>
 <body>
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
         <div th:replace="QuanLySan/includes/menu_QLS::menu"></div>
         <div class="layout-page">
-            <div th:replace="QuanLySan/includes/navbar_QLS::navbar"></div>
             <div class="content-wrapper">
                 <!-- Content -->
-
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <th:block th:fragment="content">
-                        <h1 class="text-center">Welcome to Thanh Page</h1>
-                        <!--Nội dung các trang con thay thế ở đây-->
+                        <h2 class="text-center">Thống Kê Doanh Thu</h2>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card p-3">
+                                    <h5>Doanh thu tổng</h5>
+                                    <p class="fs-3 text-primary">$45,000</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card p-3">
+                                    <h5>Số lượt đặt sân</h5>
+                                    <p class="fs-3 text-success">320</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-container mt-4">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+
+                        <div class="card mt-4 p-3">
+                            <h5>Báo Cáo Chi Tiết</h5>
+                            <table class="table table-striped mt-2">
+                                <thead>
+                                <tr>
+                                    <th>Tháng</th>
+                                    <th>Doanh Thu ($)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="entry : ${revenueData}">
+                                    <td th:text="${entry.key}"></td>
+                                    <td th:text="${entry.value}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </th:block>
                 </div>
                 <!-- / Content -->
-
                 <!-- Footer -->
                 <div th:replace="QuanLySan/includes/footer_QLS::footer"></div>
                 <!-- / Footer -->
-
                 <div class="content-backdrop fade"></div>
             </div>
         </div>
     </div>
     <div class="layout-overlay layout-menu-toggle"></div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var revenueData = /*[[${revenueData}]]*/ {};
+    var labels = Object.keys(revenueData);
+    var data = Object.values(revenueData);
+
+    var ctx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Doanh Thu ($)',
+                data: data,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>
