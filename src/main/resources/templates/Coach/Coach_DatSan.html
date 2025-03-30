@@ -1,68 +1,81 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt Sân</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 font-sans antialiased">
-<div class="flex h-screen">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head"></head>
+<body>
     <!-- Sidebar -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <div th:replace="master/master_coach/menu::menu"></div>
+            <div class="layout-page">
+                <div th:replace="master/navbar::navbar"></div>
+                <div class="content-wrapper">
+                    <!-- Content -->
 
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <th:block th:fragment="content">
+                            <!--Nội dung các trang con thay thế ở đây-->
+                            <body class="bg-light">
+                            <div class="container py-5">
+                                <h1 class="text-center text-black fw-bold mb-4">ĐẶT SÂN PICKELBALL</h1>
+                                <div class="card shadow-lg p-4 mb-5">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="field-name" class="form-label">Tên Sân:</label>
+                                            <input type="text" class="form-control" id="field-name" placeholder="Nhập tên sân">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="date" class="form-label">Ngày Đặt:</label>
+                                            <input type="date" class="form-control" id="date">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="time" class="form-label">Giờ Đặt:</label>
+                                            <input type="time" class="form-control" id="time">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Xác Nhận Đặt Sân</button>
+                                    </form>
+                                </div>
+                                <div class="card shadow-lg p-4">
+                                    <h2 class="text-center text-secondary mb-3">Danh Sách Sân Đã Đặt</h2>
+                                    <table class="table table-striped text-center">
+                                        <thead class="table-primary">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Tên Sân</th>
+                                            <th>Ngày</th>
+                                            <th>Giờ</th>
+                                            <th>Hành Động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Sân A</td>
+                                            <td>2025-06-15</td>
+                                            <td>18:00</td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm">Sửa</button>
+                                                <button class="btn btn-danger btn-sm">Xóa</button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+                        </th:block>
+                    </div>
+                    <!-- / Content -->
 
-    <!-- Main content -->
-    <div class="flex-1 flex flex-col">
-        <!-- Header -->
-        <header class="flex items-center justify-between p-6 bg-white shadow-md">
-            <div class="relative w-1/2">
-                <input type="text" placeholder="Search..." class="w-full px-4 py-2 text-gray-700 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600">
-                <i class="fas fa-search absolute top-3 left-3 text-gray-500"></i>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span class="text-gray-700">Star</span>
-                <div class="relative">
-                    <img src="https://storage.googleapis.com/a1aa/image/Pwn5QhTGZWPgGPV7GGPOmi7qBQDD9-FGd-ZXLmPaSfc.jpg" alt="User avatar" class="w-10 h-10 rounded-full">
-                    <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                    <!-- Footer -->
+                    <div th:replace="master/master_coach/footer::footer"></div>
+                    <!-- / Footer -->
                 </div>
             </div>
-        </header>
-        <!-- Main section -->
-        <main class="flex-1 p-6">
-            <h1 class="text-2xl font-semibold text-gray-800">Đặt Sân</h1>
-            <form class="mt-6 space-y-4">
-                <div>
-                    <label for="date" class="block text-gray-700">Chọn Ngày:</label>
-                    <input type="date" id="date" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
-                </div>
-                <div>
-                    <label for="time" class="block text-gray-700">Chọn Giờ:</label>
-                    <input type="time" id="time" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
-                </div>
-                <div>
-                    <label for="court" class="block text-gray-700">Chọn Sân:</label>
-                    <select id="court" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600">
-                        <option value="court1">Sân 1</option>
-                        <option value="court2">Sân 2</option>
-                        <option value="court3">Sân 3</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full px-4 py-2 text-white bg-purple-600 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600">Đặt Sân</button>
-            </form>
-        </main>
-        <!-- Footer -->
-        <footer class="p-6 bg-white shadow-md">
-            <div class="flex justify-between text-gray-500">
-                <span>© 2025, made with <i class="fas fa-heart text-red-500"></i> by <a href="#" class="text-purple-600">ThemeSelection</a></span>
-                <div class="space-x-4">
-                    <a href="#" class="text-purple-600">License</a>
-                    <a href="#" class="text-purple-600">More Themes</a>
-                    <a href="#" class="text-purple-600">Documentation</a>
-                    <a href="#" class="text-purple-600">Support</a>
-                </div>
-            </div>
-        </footer>
+        </div>
     </div>
-</div>
+
+
+
 </body>
 </html>

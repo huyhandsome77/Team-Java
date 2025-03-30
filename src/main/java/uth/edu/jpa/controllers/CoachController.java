@@ -37,15 +37,15 @@ public class CoachController {
         return "coach/datsan";
     }
 
-    @GetMapping("/Coach_Players")
+    @GetMapping("/players")
     public String players(Model model) {
         model.addAttribute("coachName", "Huấn Luyện Viên");
         return "coach/Coach_Players";
     }
 
-    @GetMapping("/Coach_Tournaments")
+    @GetMapping("/tournament")
     public String tournaments(Model model) {
         model.addAttribute("coachName", "Huấn Luyện Viên");
-        return "coach/Coach_Tournaments";
+        return "coach/Coach_Tournament";
     }
 }
