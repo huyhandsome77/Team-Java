@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="master/head::head"></head>
+<head th:replace="master/head::head">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1E3A8A;
+        }
+        .card {
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .btn-custom {
+            background-color: #1F2937;
+            color: white;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .btn-custom:hover {
+            background-color: #111827;
+        }
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-footer {
+            background-color: white;
+            border-top: none;
+        }
+    </style>
+</head>
 <body>
 <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
@@ -12,10 +46,128 @@
 
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <th:block th:fragment="content">
-                        <!--Nội dung các trang con thay thế ở đây-->
-                        <h1>Đây là trang đặt sân</h1>
+                        <div class="container py-5">
+                        <div class="row">
+                            <!-- Card 1 -->
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <img src="https://storage.googleapis.com/a1aa/image/txda-oRC57KoFF8blZdxJ0hmUyjtBDwJEJNjhNMkZsQ.jpg" class="card-img-top" alt="Football field at night with city lights in the background">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sân Pickleball Vườn Lan </h5>
+                                        <p class="card-text">Khu vực: Quận 6, TP.HCM</p>
+                                        <p class="card-text">Số sân: 4</p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                        </div>
+                                        <p class="card-text">Thời gian hoạt động</p>
+                                        <div class="d-flex ">
+                                            <span class="bg-success text-white rounded p-1 mb-3">5:00 - 23:00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center m-2">
+                                            <span class=" p-2 bg-light text-black rounded"><i class="fas fa-wifi"></i> Wifi</span>
+                                            <span class="ms-6 p-2 bg-light text-black rounded"><i class="fas fa-lock"></i> Căng tin</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary w-100">Đặt nhanh kèo muộn</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <img src="https://storage.googleapis.com/a1aa/image/OE9R-WW0bul1jxpK5BJAt0_laDhWfdx4dJGIDqTnBbI.jpg" class="card-img-top" alt="Aerial view of a football field surrounded by trees and buildings">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sân Pickleball D-Joy</h5>
+                                        <p class="card-text">Khu vực: Quận 2, TP.HCM</p>
+                                        <p class="card-text">Số sân: 3</p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                        </div>
+                                        <p class="card-text">Thời gian hoạt động</p>
+                                        <div class="d-flex ">
+                                            <span class="bg-success text-white rounded p-1 mb-3">5:00 - 23:00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center m-2">
+                                            <span class=" p-2 bg-light text-black rounded"><i class="fas fa-wifi"></i> Wifi</span>
+                                            <span class="ms-6 p-2 bg-light text-black rounded"><i class="fas fa-lock"></i> Căng tin</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary w-100">Đặt nhanh kèo muộn</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <img src="https://storage.googleapis.com/a1aa/image/2QqR6NDHnciQvstwWOJ-swvzfVoaiRdat9v94JhI6HQ.jpg" class="card-img-top" alt="Football field with players at night under floodlights">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sân Pickleball Lan Anh</h5>
+                                        <p class="card-text">Khu vực: Quận 10, TP.HCM</p>
+                                        <p class="card-text">Số sân: 15</p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                        </div>
+                                        <p class="card-text">Thời gian hoạt động</p>
+                                        <div class="d-flex ">
+                                            <span class="bg-success text-white rounded p-1 mb-3">5:00 - 23:00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center m-2">
+                                            <span class=" p-2 bg-light text-black rounded"><i class="fas fa-wifi"></i> Wifi</span>
+                                            <span class="ms-6 p-2 bg-light text-black rounded"><i class="fas fa-lock"></i> Căng tin</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary w-100">Đặt nhanh kèo muộn</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card 4 -->
+                            <div class="col-md-6 col-lg-3 mb-4">
+                                <div class="card h-100">
+                                    <img src="https://storage.googleapis.com/a1aa/image/KcxOavPq7H_U0A4MzVOQ4fxSPUu49nowmHr-FAn1aKo.jpg" class="card-img-top" alt="Football field with players and training equipment at night">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sân Pickleball 002</h5>
+                                        <p class="card-text">Khu vực: TP. Thủ Đức, TP.HCM</p>
+                                        <p class="card-text">Số sân: 5</p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                            <span class="text-warning"><i class="fas fa-star"></i></span>
+                                        </div>
+                                        <p class="card-text">Thời gian hoạt động</p>
+                                        <div class="d-flex ">
+                                            <span class="bg-success text-white rounded p-1 mb-3">5:00 - 23:00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-center m-2">
+                                            <span class=" p-2 bg-light text-black rounded"><i class="fas fa-wifi"></i> Wifi</span>
+                                            <span class="ms-6 p-2 bg-light text-black rounded"><i class="fas fa-lock"></i> Căng tin</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary w-100">Đặt nhanh kèo muộn</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
                     </th:block>
-                </div>
                 <!-- / Content -->
 
                 <!-- Footer -->

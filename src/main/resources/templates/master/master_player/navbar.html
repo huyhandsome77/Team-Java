@@ -9,16 +9,71 @@
 
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <!-- Search -->
+
+        <style>
+            .search-container {
+                overflow: hidden;
+                width: 0;
+                transition: width 0.5s ease-in-out;
+            }
+            .search-container.active {
+                width: 200px; /* Độ rộng mong muốn khi hiển thị */
+            }
+            .search-input {
+                width: 100%;
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+            .search-container.active .search-input {
+                opacity: 1;
+            }
+        </style>
+
         <div class="navbar-nav align-items-center">
             <div class="nav-item d-flex align-items-center">
-                <i class="bx bx-search bx-md"></i>
-                <input
-                        type="text"
-                        class="form-control border-0 shadow-none ps-1 ps-sm-2"
-                        placeholder="Search..."
-                        aria-label="Search..." />
+                <i class="bx bx-search bx-md" id="search-icon" style="cursor: pointer;"></i>
+                <div class="search-container" id="search-box">
+                    <input
+                            type="text"
+                            class="form-control border-0 shadow-none ps-1 ps-sm-2 search-input"
+                            placeholder="Tìm kiếm tại đây"
+                            aria-label="Tìm kiếm tại đây"
+                            id="search-input"
+                    />
+                </div>
             </div>
         </div>
+
+        <script>
+            let searchBox = document.getElementById("search-box");
+            let searchInput = document.getElementById("search-input");
+            let interval;
+
+            function toggleSearch() {
+                if (document.activeElement === searchInput) return; // Không ẩn khi đang nhập
+                searchBox.classList.toggle("active");
+                if (!searchBox.classList.contains("active")) {
+                    setTimeout(() => {
+                        searchInput.value = "";
+                    }, 500);
+                }
+            }
+
+            function startAutoToggle() {
+                interval = setInterval(toggleSearch, 3000);
+            }
+
+            function stopAutoToggle() {
+                clearInterval(interval);
+            }
+
+            searchInput.addEventListener("focus", stopAutoToggle);
+            searchInput.addEventListener("blur", startAutoToggle);
+
+            startAutoToggle(); // Bắt đầu hiệu ứng tự động
+        </script>
+
+
         <!-- /Search -->
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
