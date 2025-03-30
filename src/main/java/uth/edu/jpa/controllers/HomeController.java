@@ -13,6 +13,10 @@ public class HomeController {
     public String PlayerDatSanPage() {
         return "player/Player_DatSan"; // gọi đến html page
     }
+    @GetMapping("/lienhe")
+    public String PlayerLienHePage() {
+        return "player/Player_LienHe"; // gọi đến html page
+    }
 
 }
 
