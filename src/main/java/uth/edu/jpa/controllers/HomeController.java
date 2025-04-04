@@ -17,6 +17,10 @@ public class HomeController {
     public String PlayerLienHePage() {
         return "player/Player_LienHe"; // gọi đến html page
     }
+    @GetMapping("/admin")
+    public String AdminPage() {
+        return "admin/admin_dashboard"; // gọi đến html page
+    }
 
 }
 
