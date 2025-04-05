@@ -37,6 +37,8 @@ public class QLSController {
 
     @GetMapping("/History")
     public String HistoryPage() { return "QuanLySan/History"; }
+    @GetMapping("Support")
+    public String SupportPage() { return "QuanLySan/Support"; }
 
     @GetMapping("/Chart")
     public String ChartPage() { return "QuanLySan/Chart"; }
