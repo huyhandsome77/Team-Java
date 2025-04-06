@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import uth.edu.jpa.models.User;
 import uth.edu.jpa.models.User.Role;
 import uth.edu.jpa.services.UserService;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Optional;
 
