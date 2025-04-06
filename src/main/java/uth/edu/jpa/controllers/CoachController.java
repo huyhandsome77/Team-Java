@@ -16,7 +16,11 @@ public class CoachController {
     @Autowired
     private BookingService bookingService;
 
+<<<<<<< HEAD
     @GetMapping("/dashboard")
+=======
+    @GetMapping("/Coach_Dashboard")
+>>>>>>> 04ba37b8d6b41a15fa522a5aef59bda557646e0a
     public String dashboard(Model model) {
         model.addAttribute("coachName", "Huấn Luyện Viên");
         return "coach/Coach_Dashboard";
@@ -48,10 +52,13 @@ public class CoachController {
         model.addAttribute("coachName", "Huấn Luyện Viên");
         return "coach/Coach_Tournament";
     }
+<<<<<<< HEAD
     @GetMapping("/chat")
     public String chat(Model model) {
         model.addAttribute("coachName","Huấn Luyện Viên");
         return "coach/Coach_Chat";
     }
 
+=======
+>>>>>>> 04ba37b8d6b41a15fa522a5aef59bda557646e0a
 }
