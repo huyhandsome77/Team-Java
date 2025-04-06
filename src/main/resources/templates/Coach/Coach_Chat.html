@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_coach/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/navbar::navbar"></div>
+
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <!-- Nội dung trang Chat -->
+                        <div class="container py-5">
+                            <h1 class="text-center text-black fw-bold mb-4">💬 CHAT VỚI NGƯỜI CHƠI</h1>
+
+                            <div class="card shadow-lg p-4 mb-5" style="height: 500px; display: flex; flex-direction: column;">
+                                <div id="chat-box" class="flex-grow-1 overflow-auto mb-3" style="max-height: 350px;">
+                                    <!-- Tin nhắn ví dụ -->
+                                    <div class="d-flex mb-3">
+                                        <div class="bg-light rounded p-2 me-auto">
+                                            <strong>Người chơi:</strong> Khi nào bắt đầu trận đấu vậy anh?
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-3 justify-content-end">
+                                        <div class="bg-primary text-white rounded p-2">
+                                            <strong>Coach:</strong> Trận sẽ bắt đầu lúc 19h bạn nhé!
+                                        </div>
+                                    </div>
+                                </div>
+                                <form class="d-flex">
+                                    <input type="text" class="form-control me-2" placeholder="Nhập tin nhắn..." />
+                                    <button type="submit" class="btn btn-primary">Gửi</button>
+                                </form>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <!-- Footer -->
+
+
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+>
