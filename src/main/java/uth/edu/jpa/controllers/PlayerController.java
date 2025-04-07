@@ -1,13 +1,16 @@
 package uth.edu.jpa.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController {
-    @GetMapping("/player")
-    public String PlayerDashboardPage() {
-        return "player/Player_Dashboard"; // gọi đến html page
+@RequestMapping("/player")
+public class PlayerController {
+    @GetMapping("/home")
+    public String PlayerDashboardPage(HttpServletRequest request) {
+        return "player/Player_Dashboard" ; // gọi đến html page
     }
     @GetMapping("/datsan")
     public String PlayerDatSanPage() {

@@ -1,39 +1,34 @@
 package uth.edu.jpa.controllers;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import uth.edu.jpa.models.User;
-import uth.edu.jpa.models.User.Role;
 import uth.edu.jpa.services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-
 import java.util.Optional;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
+    // Constructor injection
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    // API đăng ký user
+    // API: Đăng ký user mới
     @PostMapping("/register")
-    public User registerUser(@RequestParam String username,
-                             @RequestParam String password,
-                             @RequestParam String email,
-                             @RequestParam String fullname,
-                             @RequestParam Role role) {
-        return userService.registerUser(username, password, email, fullname, role);
+    public User registerUser(@RequestBody User user) {
+        return userService.register(user);
     }
-
-    // API lấy infor theo ID
+    // API: Lấy thông tin user theo ID
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable int id) {
         return userService.getUserById(id);
     }
 
-    // API lấy infor theo username
+    // API: Lấy thông tin user theo username
     @GetMapping("/username/{username}")
     public Optional<User> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
