@@ -11,8 +11,10 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue()
     private int userID;
+
+    @Column(nullable = false, unique = true)
     private String username;
     private String password;
     private String email;
