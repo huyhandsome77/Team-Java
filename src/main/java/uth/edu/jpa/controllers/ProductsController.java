@@ -50,4 +50,5 @@ public class ProductsController {
     public Products updateInventory(@PathVariable Long id, @PathVariable int quantity) {
         return service.updateInventory(id, quantity);
     }
+
 }
