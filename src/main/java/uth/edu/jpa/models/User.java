@@ -22,6 +22,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
+
     // Constructors
     public User() {}
 

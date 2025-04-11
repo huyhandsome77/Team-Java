@@ -98,6 +98,14 @@
             </li>
 
             <!-- ✅ Đã đăng nhập -->
+            <li th:if="${#authorization.expression('isAuthenticated()')}" class="nav-item mx-6">
+                <a class="nav-link position-relative" th:href="@{/player/giohang}">
+                    <i class="bx bx-cart bx-sm"></i>
+                    <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle"
+                          th:text="${soLuongTrongGio != null ? soLuongTrongGio : 0}">
+                    </span>
+                </a>
+            </li>
             <li th:if="${#authorization.expression('isAuthenticated()')}" class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
