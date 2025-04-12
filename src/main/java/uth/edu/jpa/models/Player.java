@@ -1,9 +1,7 @@
 package uth.edu.jpa.models;
 
-
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "players")
@@ -14,16 +12,11 @@ public class Player {
     private Long id;
 
     private String name;
-    private String level;
-    private String notes;
 
-    @ManyToMany(mappedBy = "players")
-    private Set<Booking> bookings = new HashSet<>();
+    @OneToMany(mappedBy = "player") // mappedBy trỏ đến thuộc tính "player" trong Booking
+    private List<Booking> bookings;
 
-    @ManyToMany(mappedBy = "participants")
-    private Set<Tournament> tournaments = new HashSet<>();
-
-    // Getters and setters
+    // Getters và Setters
     public Long getId() {
         return id;
     }
@@ -40,19 +33,11 @@ public class Player {
         this.name = name;
     }
 
-    public String getLevel() {
-        return level;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

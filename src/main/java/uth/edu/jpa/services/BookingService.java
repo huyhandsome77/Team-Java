@@ -17,17 +17,28 @@ public class BookingService {
     private BookingRepository bookingRepository;
 
     @Autowired
-    private CourtRepository courtRepository; // Thêm CourtRepository
+    private CourtRepository courtRepository;
 
+    // Lưu booking vào database
     public Booking saveBooking(Booking booking) {
         if (booking.getStartTime() != null) {
-            booking.setEndTime(booking.getStartTime().plusHours(1));
+            booking.setEndTime(booking.getStartTime().plusHours(1)); // Tự động tính giờ kết thúc
         }
         return bookingRepository.save(booking);
     }
 
-    // Thêm phương thức getAllCourts để lấy danh sách sân
+    // Lấy danh sách tất cả sân
     public List<Court> getAllCourts() {
         return courtRepository.findAll();
+    }
+
+    // Lấy danh sách tất cả booking
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    // Xóa booking theo ID
+    public void deleteBooking(Long id) {
+        bookingRepository.deleteById(id);
     }
 }

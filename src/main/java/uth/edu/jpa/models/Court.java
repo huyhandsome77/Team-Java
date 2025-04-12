@@ -10,7 +10,9 @@ public class Court {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; // Tên sân, ví dụ: "Sân 1", "Sân 2"
+    private String name;
+
+    private boolean available;
 
     // Getters và Setters
     public Long getId() {
@@ -27,5 +29,13 @@ public class Court {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
