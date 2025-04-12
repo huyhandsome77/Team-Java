@@ -24,7 +24,7 @@
     <ul class="menu-inner py-1">
         <!-- HomePage -->
         <li class="menu-item active open">
-            <a th:href="@{/player}" class="menu-link">
+            <a th:href="@{/admin/dashboard}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-smile"></i>
                 <div class="text-truncate" data-i18n="HomePage">Bảng tin</div>
             </a>
@@ -32,26 +32,21 @@
 
         <!-- Service -->
         <li class="menu-item">
-            <a th:href="@{/datsan}" class="menu-link">
+            <a th:href="@{/admin/quanlitaikhoan}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div class="text-truncate" data-i18n="Service">Quản lý tài khoản</div>
+                <div class="text-truncate" data-i18n="Service">Quản lí tài khoản</div>
             </a>
         </li>
 
         <li class="menu-item">
-            <a th:href="@{/muasanpham}" class="menu-link">
+            <a th:href="@{/admin/quanlibanhang}" class="menu-link">
                 <i class='menu-icon bx bx-cart-add'></i>
-                <div class="text-truncate">quản lý bán hàng</div>
+                <div class="text-truncate">quản lí bán hàng</div>
             </a>
         </li>
 
         <!-- Front Pages -->
-        <li class="menu-item">
-            <a th:href="@{/nhacnho}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-store"></i>
-                <div class="text-truncate" data-i18n="Front Pages">Nhắc nhở</div>
-            </a>
-        </li>
+
         <li class="menu-item">
             <a th:href="@{/lienhe}" class="menu-link">
                 <i class="menu-icon bi bi-person-lines-fill"></i>

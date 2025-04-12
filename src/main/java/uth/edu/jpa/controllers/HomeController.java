@@ -9,19 +9,19 @@ public class HomeController {
     public String PlayerDashboardPage() {
         return "player/Player_Dashboard"; // gọi đến html page
     }
+
     @GetMapping("/datsan")
     public String PlayerDatSanPage() {
         return "player/Player_DatSan"; // gọi đến html page
     }
+
     @GetMapping("/lienhe")
     public String PlayerLienHePage() {
         return "player/Player_LienHe"; // gọi đến html page
     }
-    @GetMapping("/admin")
-    public String AdminPage() {
-        return "admin/admin_dashboard"; // gọi đến html page
-    }
 
 }
+
+
 
 
