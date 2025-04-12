@@ -1,52 +1,73 @@
 package uth.edu.jpa.models;
+
 import jakarta.persistence.*;
+
 @Entity
-@Table (name="SanPham")
+@Table(name = "SanPham")
 public class SanPham {
+
+    public enum LoaiSanPham {
+        DO_AN, NUOC_UONG, DUNG_CU
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int MaSanpham; //Id
-    private String TenSanPham;
-    private double Gia;
-    private int LoaiSanPham;
-    private int TonKho;
-    //getter và setter
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int maSanPham;
 
-    public int getMaSanpham() {
-        return MaSanpham;
+    private String tenSanPham;
+    private double gia;
+
+    @Enumerated(EnumType.STRING)
+    private LoaiSanPham loaiSanPham;
+
+    private int tonKho;
+    private String img;
+
+    public SanPham() {}
+
+    public SanPham(String tenSanPham, double gia, LoaiSanPham loaiSanPham, int tonKho, String img) {
+        this.tenSanPham = tenSanPham;
+        this.gia = gia;
+        this.loaiSanPham = loaiSanPham;
+        this.tonKho = tonKho;
+        this.img = img;
     }
 
-    public void setMaSanpham(int maSanpham) {
-        MaSanpham = maSanpham;
-    }
+    // Getters & Setters
 
-    public String getTenSanPham() {
-        return TenSanPham;
-    }
+    public int getMaSanPham() { return maSanPham; }
 
-    public void setTenSanPham(String tenSanPham) {
-        TenSanPham = tenSanPham;
-    }
+    public void setMaSanPham(int maSanPham) { this.maSanPham = maSanPham; }
 
-    public double getGia() {
-        return Gia;
-    }
+    public String getTenSanPham() { return tenSanPham; }
 
-    public void setGia(double gia) {
-        Gia = gia;
-    }
+    public void setTenSanPham(String tenSanPham) { this.tenSanPham = tenSanPham; }
 
-    public int getLoaiSanPham() {
-        return LoaiSanPham;
-    }
+    public double getGia() { return gia; }
 
-    public void setLoaiSanPham(int loaiSanPham) {
-        LoaiSanPham = loaiSanPham;
-    }
+    public void setGia(double gia) { this.gia = gia; }
 
-    //constuctor
-    public SanPham(int tonKho) {
-        TonKho = tonKho;
-    }
+    public LoaiSanPham getLoaiSanPham() { return loaiSanPham; }
 
+    public void setLoaiSanPham(LoaiSanPham loaiSanPham) { this.loaiSanPham = loaiSanPham; }
+
+    public int getTonKho() { return tonKho; }
+
+    public void setTonKho(int tonKho) { this.tonKho = tonKho; }
+
+    public String getImg() { return img; }
+
+    public void setImg(String img) { this.img = img; }
+
+    @Override
+    public String toString() {
+        return "SanPham{" +
+                "maSanPham=" + maSanPham +
+                ", tenSanPham='" + tenSanPham + '\'' +
+                ", gia=" + gia +
+                ", loaiSanPham=" + loaiSanPham +
+                ", tonKho=" + tonKho +
+                ", img='" + img + '\'' +
+                '}';
+    }
 }

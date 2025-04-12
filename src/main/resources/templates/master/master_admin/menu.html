@@ -1,0 +1,88 @@
+<aside th:fragment="menu" id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a th:href="@{/home}" class="app-brand-link">
+            <span class="app-brand-logo demo">
+                <img
+                        th:src="@{/assets/img/favicon/logopickleball.png}"
+                        alt="Logo"
+                        style="width: 70px; height: auto"
+                />
+            </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-1">PickleSpot</span>
+        </a>
+        <a
+                href="javascript:void(0);"
+                class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
+        >
+            <i
+                    class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"
+            ></i>
+        </a>
+    </div>
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- HomePage -->
+        <li class="menu-item active open">
+            <a th:href="@{/admin/dashboard}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-smile"></i>
+                <div class="text-truncate" data-i18n="HomePage">Bảng tin</div>
+            </a>
+        </li>
+
+        <!-- Service -->
+        <li class="menu-item">
+            <a th:href="@{/admin/quanlitaikhoan}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div class="text-truncate" data-i18n="Service">Quản lí tài khoản</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a th:href="@{/admin/quanlibanhang}" class="menu-link">
+                <i class='menu-icon bx bx-cart-add'></i>
+                <div class="text-truncate">Quản lí bán hàng</div>
+            </a>
+        </li>
+
+        <!-- Front Pages -->
+    </ul>
+
+    <!-- Thêm CSS để xóa gạch chân -->
+    <style>
+        .menu-link {
+            text-decoration: none !important; /* Xóa gạch chân cho các liên kết trong menu */
+        }
+        .menu-link:hover {
+            text-decoration: none !important; /* Đảm bảo không có gạch chân khi hover */
+        }
+        .app-brand-link {
+            text-decoration: none !important; /* Xóa gạch chân cho logo link */
+        }
+    </style>
+
+    <!-- jQuery Script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Lấy menu đang active từ localStorage
+            var activeMenuItem = localStorage.getItem("activeMenuItem");
+            if (activeMenuItem) {
+                $("ul.menu-inner li").removeClass("active");
+                $('ul.menu-inner li a[href="' + activeMenuItem + '"]').closest("li").addClass("active");
+            }
+
+            // Khi click vào menu
+            $("ul.menu-inner li a").click(function (event) {
+                var activeLink = $(this).attr("href");
+
+                // Kiểm tra href có hợp lệ không (tránh lỗi href="")
+                if (activeLink && activeLink !== "#") {
+                    localStorage.setItem("activeMenuItem", activeLink);
+                } else {
+                    event.preventDefault(); // Ngăn chặn load lại trang
+                }
+            });
+        });
+    </script>
+</aside>
