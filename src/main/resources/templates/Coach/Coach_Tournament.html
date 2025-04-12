@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -86,4 +87,100 @@
 
 
 </body>
+=======
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+</head>
+<body>
+<!-- Sidebar -->
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_coach/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <!--Nội dung các trang con thay thế ở đây-->
+                        <div class="container py-5">
+                            <h2 class="text-center text-black fw-bold mb-4">QUẢN LÍ GIẢI ĐẤU PICKELBALL</h2>
+
+                            <!-- Form tạo giải đấu -->
+                            <div class="card shadow-sm p-4 mb-4">
+                                <h4 class="mb-3">Tạo Giải Đấu</h4>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tournament-name" class="form-label">Tên Giải Đấu:</label>
+                                        <input type="text" id="tournament-name" class="form-control" placeholder="Nhập tên giải đấu">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date" class="form-label">Ngày Tổ Chức:</label>
+                                        <input type="date" id="date" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">Địa Điểm:</label>
+                                        <input type="text" id="location" class="form-control" placeholder="Nhập địa điểm tổ chức">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary fw-bold w-100">Tạo Giải Đấu</button>
+                                </form>
+                            </div>
+
+                            <!-- Danh sách giải đấu -->
+                            <div class="card shadow-sm p-4">
+                                <h4 class="mb-3">Danh sách Giải Đấu</h4>
+                                <table class="table table-bordered text-center">
+                                    <thead class="table-primary">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên Giải Đấu</th>
+                                        <th>Ngày</th>
+                                        <th>Địa Điểm</th>
+                                        <th>Hành Động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Pickleball Championship</td>
+                                        <td>2025-06-15</td>
+                                        <td>Sân 1</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning">Sửa</button>
+                                            <button class="btn btn-sm btn-danger">Xóa</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+                    </th:block>
+                </div>
+                <!-- / Content -->
+
+                <!-- Footer -->
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+
+=======
+                <div th:replace="master/master_coach/footer::footer"></div>
+>>>>>>> 04ba37b8d6b41a15fa522a5aef59bda557646e0a
+>>>>>>> 4468b5d3f2506f4fb70cdb0fd95bdbf9b15f5678
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</body>
+>>>>>>> 30e5f160a636709e3a4cc54e413c955712659e2f
 </html>
