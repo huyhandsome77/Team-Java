@@ -12,7 +12,7 @@ public class SanPham {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int maSanPham;
+    private long maSanPham;
 
     private String tenSanPham;
     private double gia;
@@ -35,7 +35,7 @@ public class SanPham {
 
     // Getters & Setters
 
-    public int getMaSanPham() { return maSanPham; }
+    public long getMaSanPham() { return maSanPham; }
 
     public void setMaSanPham(int maSanPham) { this.maSanPham = maSanPham; }
 

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_admin/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <!DOCTYPE html>
+                        <html lang="vi">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Danh Bạ Liên Hệ</title>
+                            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+                            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+                            <style>
+                                body {
+                                    background-color: #ffffff;
+                                    min-height: 100vh;
+                                    font-family: 'Segoe UI', sans-serif;
+                                }
+                                .contact-panel {
+                                    margin-top: 30px;
+                                }
+                                .contact-list {
+                                    background-color: #fff;
+                                    border-right: 1px solid #ddd;
+                                    border-radius: 10px 0 0 10px;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                                }
+                                .contact-details {
+                                    background-color: #fff;
+                                    border-radius: 0 10px 10px 0;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+                                }
+                                .contact-list-item {
+                                    cursor: pointer;
+                                }
+                                .contact-list-item:hover {
+                                    background-color: #f8f9fa;
+                                }
+                                .btn-group-custom button {
+                                    margin-right: 10px;
+                                }
+                                .contact-header {
+                                    border-bottom: 1px solid #ddd;
+                                    margin-bottom: 15px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <!-- Toolbar hành động đẹp -->
+                        <div class="d-flex justify-content-end">
+                            <div class="btn-toolbar mt-3 me-4 p-2 rounded shadow-sm bg-white" style="gap: 10px;">
+                                <button class="btn btn-secondary"><i class="fas fa-plus mr-1"></i> Thêm Liên Hệ</button>
+                            </div>
+                        </div>
+                        <div class="container-fluid contact-panel">
+                            <div class="row">
+                                <!-- Danh sách liên hệ -->
+                                <div class="col-md-4 p-0 contact-list">
+                                    <div class="p-4">
+                                        <h4 class="mb-4"><i class="fas fa-address-book mr-2"></i>Tất Cả Người Dùng</h4>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item contact-list-item">Đinh Bình<br><small>binhd1822005@gmail.com</small></li>
+                                            <li class="list-group-item contact-list-item">Phước Thịnh<br><small>Nguyenthinh2500@gmail.com</small></li>
+                                            <li class="list-group-item contact-list-item">Anh Huy<br><small>nguenanhhuy1177@ut.edu.vn</small></li>
+                                            <li class="list-group-item contact-list-item">Quang Thạnh<br><small>LQThanh020@gmail.com</small></li>
+                                            <li class="list-group-item contact-list-item">Gia Hợp<br><small>huynhghop1000@ut.edu.vn</small></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Chi tiết liên hệ -->
+                                <div class="col-md-8 p-0 contact-details">
+                                    <div class="p-4">
+                                        <div class="d-flex align-items-center contact-header mb-4">
+                                            <!-- Ảnh avatar -->
+                                            <img src="/assets/img/elements/1.jpg" alt="Avatar" class="rounded-circle mr-3" width="80" height="80">
+                                            <div>
+                                                <h3 class="mb-1">Đinh Bình</h3>
+                                                <p class="text-muted mb-0">283 LÊ ĐỨC THỌ, PHƯỜNG 17, QUẬN GÒ VẤP, TPHCM</p>
+                                            </div>
+                                        </div>
+                                        <!-- Thông tin liên hệ -->
+                                        <div>
+                                            <p><strong><i class="fas fa-mobile-alt mr-2"></i>Mobile Phone:</strong> 0914-913-662</p>
+                                            <p><strong><i class="fas fa-envelope mr-2"></i>Email:</strong> dbinh1822005@gmail.com</p>
+                                            <p><strong><i class="fab fa-twitter mr-2"></i>Message:</strong> @dbinh_netizen</p>
+                                        </div>
+                                        <!-- Các nút thao tác -->
+                                        <div class="btn-group-custom mt-4">
+                                            <button class="btn btn-primary"><i class="fas fa-edit mr-1"></i> Cập Nhật</button>
+                                            <button class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Xóa</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Scripts -->
+                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+                        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                        </body>
+                        </html>
+
+                    </th:block>
+                </div>
+                <!-- / Content -->
+
+                <footer>
+
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="master/hoaroi::hoaroi"></script>
+</body>
+</html>

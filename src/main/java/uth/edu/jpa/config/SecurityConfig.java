@@ -17,6 +17,9 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private CustomSuccessHandler customSuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,11 +35,11 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customSuccessHandler)
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll());
-
+                .logout(logout -> logout.permitAll())
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
     @Bean

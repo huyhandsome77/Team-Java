@@ -21,7 +21,7 @@ public class CartController {
 
     @PostMapping("/them-vao-gio")
     public String themVaoGio(@RequestParam int maSanPham, @RequestParam int soLuong) {
-        SanPham sp = sanPhamRepository.findById(maSanPham).orElseThrow();
+        SanPham sp = sanPhamRepository.findById((long) maSanPham).orElseThrow();
         cartService.themSanPham(sp, soLuong);
         return "redirect:/gio-hang";
     }
