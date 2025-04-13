@@ -25,11 +25,16 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute("user") User user) {
-        // TODO: Mã hóa mật khẩu, gán role mặc định
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(User.Role.PLAYER);
-        userRepository.save(user);
+    public String processRegister(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+        System.out.println(">> Registering user: " + user.getUsername());
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRole(User.Role.PLAYER);
+            userRepository.save(user);
+            redirectAttributes.addFlashAttribute("success", "Tạo tài khoản thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi tạo tài khoản.");
+        }
         return "redirect:/login?registered";
     }
 
