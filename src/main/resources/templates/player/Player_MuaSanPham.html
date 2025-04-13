@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_player/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/master_player/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <!--Nội dung các trang con thay thế ở đây-->
+                        <div class="container py-5">
+                            <div class="row">
+                                <div class="card col-12 mb-3">
+                                    <div class="card-body d-flex justify-content-center gap-3">
+                                        <button class="btn custom-btn flex-grow-1" data-category="all">Tất cả</button>
+                                        <button class="btn custom-btn flex-grow-1" data-category="do-an">Đồ ăn</button>
+                                        <button class="btn custom-btn flex-grow-1" data-category="nuoc-uong">Nước uống</button>
+                                        <button class="btn custom-btn flex-grow-1" data-category="dung-cu">Dụng cụ</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <style>
+                                .custom-btn {
+                                    font-size: 16px;
+                                    font-weight: bold;
+                                    padding: 12px 20px;
+                                    border-radius: 10px;
+                                    transition: all 0.3s ease-in-out;
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                                    background: linear-gradient(135deg, #5F61E6, #4B4DD6);
+                                    color: white;
+                                    border: none;
+                                    outline: none;
+                                    cursor: pointer;
+                                    display: inline-block;
+                                    text-transform: uppercase;
+                                    letter-spacing: 1px;
+                                }
+
+                                .custom-btn:hover {
+                                    transform: translateY(-1px);
+                                    background: linear-gradient(135deg, #4B4DD6, #3A3CC6);
+                                }
+
+                                .custom-btn:active {
+                                    transform: translateY(1px);
+                                    background: linear-gradient(135deg, #3A3CC6, #2A2CB6);
+                                }
+                            </style>
+                            <!-- Đồ ăn -->
+                            <div class="category do-an">
+                                <h5 class="fw-bold text-center section-title">ĐỒ ĂN</h5>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3 mb-4 product-item"
+                                         th:each="sp : ${dsSanPham}"
+                                         th:if="${sp.loaiSanPham.name() == 'DO_AN'}">
+                                        <div class="card h-100">
+                                            <img th:src="@{'/assets/img/elements/SanPham/' + ${sp.img}}" class="card-img-top" style="object-fit: cover;">
+                                            <div class="card-body">
+                                                <h5 class="card-title fw-bold" th:text="${sp.tenSanPham}">Tên</h5>
+                                                <p class="card-text">Giá:
+                                                    <span class="text-danger"
+                                                          th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 3, 'POINT')}"></span> VND
+                                                </p>
+                                                <p class="card-text">Trạng thái:
+                                                    <span th:classappend="${sp.tonKho > 0} ? ' bg-success' : ' bg-danger'"
+                                                          class="text-white rounded p-1"
+                                                          th:text="${sp.tonKho > 0 ? 'Còn hàng' : 'Hết hàng'}">
+                                                </span>
+                                                </p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class="btn btn-primary w-100" onclick="openPopup()">Mua hàng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nước uống -->
+                            <div class="category nuoc-uong">
+                                <h5 class="fw-bold text-center section-title">NƯỚC UỐNG</h5>
+                                <div class="row">
+                                <div class="col-md-6 col-lg-3 mb-4 product-item"
+                                     th:each="sp : ${dsSanPham}"
+                                     th:if="${sp.loaiSanPham.name() == 'NUOC_UONG'}">
+                                    <div class="card h-100">
+                                        <img th:src="@{'/assets/img/elements/SanPham/' + ${sp.img}}" class="card-img-top" style="object-fit: cover;">
+                                        <div class="card-body">
+                                            <h5 class="card-title fw-bold" th:text="${sp.tenSanPham}">Tên</h5>
+                                            <p class="card-text">Giá:
+                                                <span class="text-danger"
+                                                      th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 3, 'POINT')}"></span> VND
+                                            </p>
+                                            <p class="card-text">Trạng thái:
+                                                <span th:classappend="${sp.tonKho > 0} ? ' bg-success' : ' bg-danger'"
+                                                      class="text-white rounded p-1"
+                                                      th:text="${sp.tonKho > 0 ? 'Còn hàng' : 'Hết hàng'}">
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button class="btn btn-primary w-100" onclick="openPopup()">Mua hàng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div></div>
+
+                            <!-- Dụng cụ -->
+                            <div class="category dung-cu">
+                                <div class="row">
+                                    <h5 class="fw-bold text-center section-title">DỤNG CỤ</h5>
+                                    <div class="col-md-6 col-lg-3 mb-4 product-item"
+                                         th:each="sp : ${dsSanPham}"
+                                         th:if="${sp.loaiSanPham.name() == 'DUNG_CU'}">
+                                        <div class="card h-100">
+                                            <img th:src="@{'/assets/img/elements/SanPham/' + ${sp.img}}" class="card-img-top" style="object-fit: cover;">
+                                            <div class="card-body">
+                                                <h5 class="card-title fw-bold" th:text="${sp.tenSanPham}">Tên</h5>
+                                                <p class="card-text">Giá:
+                                                    <span class="text-danger"
+                                                          th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 3, 'POINT')}"></span> VND
+                                                </p>
+                                                <p class="card-text">Trạng thái:
+                                                    <span th:classappend="${sp.tonKho > 0} ? ' bg-success' : ' bg-danger'"
+                                                          class="text-white rounded p-1"
+                                                          th:text="${sp.tonKho > 0 ? 'Còn hàng' : 'Hết hàng'}">
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <div class="card-footer">
+                                                <button class="btn btn-primary w-100" onclick="openPopup()">Mua hàng</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="popup-overlay" id="popupForm">
+                            <div class="popup-content">
+                                <span class="close-btn" onclick="closePopup()">&times;</span>
+                                <h3 class="popup-title">Thông tin nhận hàng</h3>
+                                <form th:action="@{/dat-hang}" method="post">
+                                    <div class="form-group">
+                                        <label for="fullname">Họ tên</label>
+                                        <input type="text" id="fullname" name="fullname" placeholder="Nguyễn Văn A" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại</label>
+                                        <input type="tel" id="phone" name="phone" placeholder="0123 456 789" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ nhận hàng</label>
+                                        <textarea id="address" name="address" rows="3" placeholder="Số 1, đường ABC, quận XYZ..." required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="note">Ghi chú (nếu có)</label>
+                                        <textarea id="note" name="note" rows="2" placeholder="Giao giờ hành chính..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
+                                </form>
+                            </div>
+                        </div>
+                        <style>
+                            .popup-overlay {
+                                display: none;
+                                position: fixed;
+                                top: 0; left: 0;
+                                width: 100vw; height: 100vh;
+                                background-color: rgba(0, 0, 0, 0.5);
+                                z-index: 9999;
+                                justify-content: center;
+                                align-items: center;
+                            }
+
+                            .popup-content {
+                                background-color: #fff;
+                                padding: 30px 25px;
+                                border-radius: 15px;
+                                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+                                width: 90%;
+                                max-width: 500px;
+                                position: relative;
+                                animation: fadeIn 0.4s ease;
+                            }
+
+                            .popup-title {
+                                font-size: 24px;
+                                font-weight: bold;
+                                text-align: center;
+                                margin-bottom: 20px;
+                                font-family: 'Poppins', sans-serif;
+                            }
+
+                            .form-group {
+                                margin-bottom: 15px;
+                            }
+
+                            .form-group label {
+                                font-weight: 600;
+                                margin-bottom: 6px;
+                                display: block;
+                            }
+
+                            .form-group input,
+                            .form-group textarea {
+                                width: 100%;
+                                padding: 10px 14px;
+                                border: 1px solid #ccc;
+                                border-radius: 8px;
+                                font-size: 14px;
+                            }
+
+                            .close-btn {
+                                position: absolute;
+                                top: 12px;
+                                right: 20px;
+                                font-size: 24px;
+                                color: #888;
+                                cursor: pointer;
+                                transition: color 0.2s;
+                            }
+
+                            .close-btn:hover {
+                                color: #000;
+                            }
+
+                            @keyframes fadeIn {
+                                from { transform: scale(0.9); opacity: 0; }
+                                to { transform: scale(1); opacity: 1; }
+                            }
+                        </style>
+                        <script>
+                            function openPopup() {
+                                document.getElementById("popupForm").style.display = "flex";
+                            }
+
+                            function closePopup() {
+                                document.getElementById("popupForm").style.display = "none";
+                            }
+
+                            // Tắt popup khi nhấn ngoài
+                            window.addEventListener("click", function (e) {
+                                const popup = document.getElementById("popupForm");
+                                if (e.target === popup) {
+                                    closePopup();
+                                }
+                            });
+                        </script>
+
+                    </th:block>
+                </div>
+                <style>
+                    .section-title {
+                        font-family: 'Poppins', sans-serif;
+                        font-size: 28px;
+                        margin: 40px 0 30px;
+                        padding: 16px 24px;
+                        border-left: 8px solid #4B4DD6;
+                        background-color: #f3f6ff;
+                        color: #333;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        border-radius: 6px;
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        display: block;
+                        width: 100%;
+                    }
+                </style>
+                <!-- / Content -->
+
+                <!-- Footer -->
+                <div th:replace="master/master_player/footer::footer"></div>
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+</div>
+<script th:replace="master/hoaroi::hoaroi"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const buttons = document.querySelectorAll(".custom-btn");
+        const categories = document.querySelectorAll(".category");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                const selectedCategory = button.getAttribute("data-category");
+
+                categories.forEach(category => {
+                    // Nếu là "all" thì hiện tất cả
+                    if (selectedCategory === "all") {
+                        category.style.display = "block";
+                    } else {
+                        // Nếu có class tương ứng thì hiện, còn lại ẩn
+                        if (category.classList.contains(selectedCategory)) {
+                            category.style.display = "block";
+                        } else {
+                            category.style.display = "none";
+                        }
+                    }
+                });
+            });
+        });
+    });
+</script>
+</body>
+</html>

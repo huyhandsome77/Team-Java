@@ -1,33 +1,83 @@
-<footer th:fragment="footer" class="content-footer footer bg-footer-theme">
-    <div class="container-xxl">
-        <div
-                class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
-            <div class="text-body">
-                ©
-                <script>
-                    document.write(new Date().getFullYear());
-                </script>
-                , made with ❤️ by
-                <a href="https://themeselection.com" target="_blank" class="footer-link">ThemeSelection</a>
-            </div>
-            <div class="d-none d-lg-inline-block">
-                <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
-                <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+<footer th:fragment="footer" class="content-footer footer bg-footer-theme  pt-5">
+    <div class="container-fluid px-2 bg-white">
+        <div class="bg-white p-4 rounded-lg shadow-sm mx-auto " >
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <ul class="nav nav-tabs mb-4 justify-content-center">
+                        <li class="nav-item"><a class="nav-link active" href="#">Hà Nội</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hồ Chí Minh</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Đà Nẵng</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Hải Dương</a></li>
+                    </ul>
+                    <div class="text-secondary">
+                        <p><i class="fas fa-map-marker-alt"></i> 140 Đ. 16, KDC Vạn Phúc, Thủ Đức, Hồ Chí Minh , Việt Nam (<a class="text-danger" href="https://maps.app.goo.gl/SZd95YfBhStbVJxBA">Google Map</a>)</p>
+                        <p><i class="fas fa-phone-alt"></i> Điện thoại: <span class="text-danger font-weight-bold">0904.79.5885</span></p>
+                        <p><i class="fas fa-envelope"></i> Mail: <a class="text-danger" href="mailto:phamtan@thegioithethao.vn">phamtan@thegioithethao.vn</a></p>
+                        <p><i class="fas fa-phone-alt"></i> Hotline (Zalo): <span class="text-danger font-weight-bold">0904.795.885</span></p>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex justify-content-center">
+                    <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.601141958591!2d106.70440027480592!3d10.841804689310957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317529002d8f3bfd%3A0xe8deb5e88c019f2c!2zU8OibiBQaWNrbGViYWxsIFbhuqFuIFBow7pjIENpdHk!5e0!3m2!1svi!2s!4v1743281525241!5m2!1svi!2s"
+                            width="100%" height="250"
+                            style="border-radius: 20px; max-width: 600px;"
+                            allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
 
-                <a
-                        href="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/documentation/"
-                        target="_blank"
-                        class="footer-link me-4"
-                >Documentation</a
-                >
-
-                <a
-                        href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
-                        target="_blank"
-                        class="footer-link"
-                >Support</a
-                >
+                </div>
             </div>
         </div>
+
+        <div class="row mt-5 text-left mx-auto" >
+            <div class="col-md-3">
+                <h5 class="font-weight-bold">Chính sách</h5>
+                <ul class="list-unstyled text-secondary">
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Điều khoản sử dụng</a></li>
+                    <li><a href="#">Hướng dẫn đổi trả</a></li>
+                    <li><a href="#">Cam kết chất lượng</a></li>
+                    <li><a href="#">Giao hàng & Nhận hàng</a></li>
+                    <li><a href="#">Đặt hàng & Thanh toán</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="font-weight-bold">Hỗ trợ</h5>
+                <ul class="list-unstyled text-secondary">
+                    <li>Hotline hỗ trợ: <span class="text-danger font-weight-bold">0366.66.9999</span></li>
+                    <li>Hotline hợp tác: <span class="text-danger font-weight-bold">0987.65.1111</span></li>
+                    <li>Email: <a class="text-danger" href="mailto:support@pickelspot.com">support@pickelspot.com</a></li>
+                    <li><a href="#">Hồ sơ năng lực</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="font-weight-bold">Dịch vụ</h5>
+                <ul class="list-unstyled text-secondary">
+                    <li><a href="#">Tư vấn đầu tư thể thao</a></li>
+                    <li><a href="#">Marketing dự án thể thao</a></li>
+                    <li><a href="#">Phần mềm quản lý thể thao</a></li>
+                    <li><a href="#">Quảng cáo trên sân thể thao</a></li>
+                    <li><a href="#">Dịch vụ đặt sân & Tìm đối</a></li>
+                    <li><a href="#">Phần mềm tổ chức giải đấu</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3 text-center">
+                <h5 class="font-weight-bold">Cộng đồng</h5>
+                <div class="d-flex justify-content-center">
+                    <a class="text-primary mx-2" href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+                    <a class="text-danger mx-2" href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+                    <a class="text-primary mx-2" href="https://chat.zalo.me/"><i class="fab fa-zalo"></i></a>
+                    <a class="text-danger mx-2" href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+                    <a class="text-dark mx-2" href="https://www.tiktok.com/"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center mt-1 mx-auto bg-primary rounded text-center">
+            <span class="text-black m-1">Copyright © 2025 SportWorld. All rights reserved.</span>
+        </div>
+
     </div>
+
 </footer>

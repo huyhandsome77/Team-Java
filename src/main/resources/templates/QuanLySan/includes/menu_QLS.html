@@ -1,0 +1,50 @@
+<aside th:fragment="menu" id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="/QuanLySan" class="app-brand-link">
+              <span class="logo pickleball">
+    <img th:src="@{/assets/img/favicon/logopickleball.png}" alt="Pickleball Logo" width="70" height="70">
+</span>
+            <span class="app-brand-text demo menu-text fw-bold ms-0 ">PickleSpot</span>
+
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- Dashboards -->
+        <li class="menu-item ">
+            <a href="/QuanLySan" class="menu-link ">
+                <i class="menu-icon tf-icons bi bi-house-door-fill"></i>
+                <div class="text-truncate" data-i18n="manage">Quản lý Sân</div>
+                <span class="badge rounded-pill bg-danger ms-auto">1</span>
+            </a>
+        <li class="menu-item ">
+        <a href="/Booking" class="menu-link ">
+            <i class="menu-icon tf-icons bi bi-person-fill"></i>
+            <div class="text-truncate" data-i18n="Request">Yêu cầu</div>
+            <span class="badge rounded-pill bg-danger ms-auto">5</span>
+        </a>
+    </li>
+        <li class="menu-item">
+            <a href="/Chart" class="menu-link">
+                <i class="menu-icon tf-icons bi bi-bar-chart-line-fill"></i>
+                <div class="text-truncate" data-i18n="charts">Thống kê</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a
+                    href="/Support"
+                    class="menu-link">
+                <i class="menu-icon tf-icons bi bi-headset"></i>
+                <div class="text-truncate" data-i18n="Support">Support</div>
+                <span class="badge rounded-pill bg-danger ms-auto">10</span>
+            </a>
+        </li>
+
+    </ul>
+</aside>

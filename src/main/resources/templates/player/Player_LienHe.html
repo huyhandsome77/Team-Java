@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head"></head>
+<style>
+  @keyframes blink {
+    0% { color: red; }
+    33% { color: blue; }
+    66% { color: green; }
+    100% { color: red; }
+  }
+
+</style>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <div th:replace="master/master_player/menu::menu"></div>
+    <div class="layout-page">
+      <div th:replace="master/master_player/navbar::navbar"></div>
+      <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <th:block th:fragment="content">
+            <!--Nội dung các trang con thay thế ở đây-->
+            <div class="container py-5">
+              <div class="row g-4">
+                <!-- Cột 1 -->
+                <div class="col-md-6">
+                  <div class="card shadow-sm">
+                    <div class="contact p-4 rounded">
+                      <h4 class="mb-3 fw-bold text-center">
+                        Nơi giải đáp toàn bộ mọi thắc mắc của bạn?
+                      </h4>
+                      <div class="des_foo mb-3 text-center">
+                        <p class="text-muted">Liên hệ với chúng tôi ngay để được hỗ trợ nhanh chóng!</p>
+                      </div>
+                      <div class="time_work text-center">
+                        <div class="mb-2">
+                          <b>Hotline:</b>
+                          <a class="fone text-decoration-none fw-bold" href="tel:0366669999">
+                            0366.66.9999
+                          </a> |
+                          <a class="fone text-decoration-none fw-bold" href="tel:0386699723">
+                            038.6699.723
+                          </a>
+                        </div>
+                        <div>
+                          <b>Email:</b>
+                          <a href="mailto:support@pickelspot.com" class="email-blink text-decoration-none fw-bold">
+                            support@pickelspot.com
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card mt-3 shadow-sm">
+                    <div class="card-body">
+                      <h5 class="text-center fw-bold">GỬI PHẢN HỒI</h5>
+                      <form>
+                        <div class="mb-3">
+                          <label class="form-label" for="fullname">Họ và Tên</label>
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-user"></i></span>
+                            <input type="text" class="form-control" id="fullname" placeholder="Nguyễn Văn A">
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="email">Email</label>
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" placeholder="email@example.com">
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="phone">Số điện thoại</label>
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-phone"></i></span>
+                            <input type="tel" class="form-control" id="phone" placeholder="0366.66.9999">
+                          </div>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label" for="message">Tin nhắn</label>
+                          <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-comment"></i></span>
+                            <textarea class="form-control" id="message" rows="3" placeholder="Nhập tin nhắn của bạn..."></textarea>
+                          </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Gửi thông tin</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cột 2 -->
+                <div class="col-md-6">
+                  <div class="card shadow-sm">
+                    <h4 class="text-center fw-bold mb-4 text-primary mt-4 p-1">DANH SÁCH SÂN ĐẤU TRÊN TOÀN QUỐC</h4>
+                    <ul class="list-group bg-label-light">
+                      <li class="list-group-item"><strong>1.</strong> <span class="fw-bold">Sân Vietnam Pickleball</span> | <span>Địa chỉ: Quận 1, TP.HCM</span></li>
+                      <li class="list-group-item"><strong>2.</strong> <span class="fw-bold">Sân Pickleball Vườn Lan</span> | <span>Địa chỉ: Quận 6, TP.HCM</span></li>
+                      <li class="list-group-item"><strong>3.</strong> <span class="fw-bold">Sân Pickleball D-Joy</span> | <span>Địa chỉ: Quận 2, TP.HCM</span></li>
+                      <li class="list-group-item"><strong>4.</strong> <span class="fw-bold">USC Pickleball Bình Trưng Đông</span> | <span>Địa chỉ: TP. Thủ Đức, TP.HCM</span></li>
+                      <li class="list-group-item"><strong>5.</strong> <span class="fw-bold">Sân Pickleball PickoLand Thảo Điền</span> | <span>Địa chỉ: Quận 2, TP.HCM</span></li>
+                      <li class="list-group-item"><strong>6.</strong> <span class="fw-bold">Sân Pickleball Lan Anh</span> | <span>Địa chỉ: Quận 10, TP.HCM</span></li>
+                      <li class="list-group-item"><strong>7.</strong> <span class="fw-bold">Sân Pickleball Hồ Tây</span> | <span>Địa chỉ: Tây Hồ, Hà Nội</span></li>
+                      <li class="list-group-item"><strong>8.</strong> <span class="fw-bold">Sân Pickleball Cầu Giấy</span> | <span>Địa chỉ: Cầu Giấy, Hà Nội</span></li>
+                      <li class="list-group-item"><strong>9.</strong> <span class="fw-bold">Sân Pickleball Times City</span> | <span>Địa chỉ: Hai Bà Trưng, Hà Nội</span></li>
+                      <li class="list-group-item"><strong>10.</strong> <span class="fw-bold">Sân Pickleball Long Biên</span> | <span>Địa chỉ: Long Biên, Hà Nội</span></li>
+                      <li class="list-group-item"><strong>11.</strong> <span class="fw-bold">Sân Pickleball Royal City</span> | <span>Địa chỉ: Thanh Xuân, Hà Nội</span></li>
+                      <li class="list-group-item"><strong>12.</strong> <span class="fw-bold">Sân Pickleball Biển Mỹ Khê</span> | <span>Địa chỉ: Sơn Trà, Đà Nẵng</span></li>
+                      <li class="list-group-item"><strong>13.</strong> <span class="fw-bold">Sân Pickleball Hòa Xuân</span> | <span>Địa chỉ: Cẩm Lệ, Đà Nẵng</span></li>
+                      <li class="list-group-item"><strong>14.</strong> <span class="fw-bold">Sân Pickleball Bà Nà Hills</span> | <span>Địa chỉ: Hòa Vang, Đà Nẵng</span></li>
+                      <li class="list-group-item"><strong>15.</strong> <span class="fw-bold">Sân Pickleball Nguyễn Văn Linh</span> | <span>Địa chỉ: Hải Châu, Đà Nẵng</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </th:block>
+        </div>
+        <!-- / Content -->
+
+        <!-- Footer -->
+        <div th:replace="master/master_player/footer::footer"></div>
+        <!-- / Footer -->
+      </div>
+    </div>
+  </div>
+</div>
+<script th:replace="master/hoaroi::hoaroi"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const elements = document.querySelectorAll(".fone, .email-blink");
+    const colors = ["red", "blue", "green"];
+    let index = 0;
+
+    setInterval(() => {
+      elements.forEach(el => {
+        el.style.color = colors[index];
+      });
+      index = (index + 1) % colors.length;
+    }, 800);
+  });
+
+</script>
+</body>
+</html>

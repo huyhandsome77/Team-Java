@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="QuanLySan/includes/menu_QLS::menu"></div>
+        <div class="layout-page">
+            <div th:replace="QuanLySan/includes/navbar_QLS::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <h1 class="text-center">Welcome to Thanh Page</h1>
+                        <div class="container xxl my-4">
+                            <div class="row col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                        </div>
+                            </div>
+
+                        </div>
+                        </div>
+                        <!--Nội dung các trang con thay thế ở đây-->
+                    </th:block>
+                </div>
+                <!-- / Content -->
+
+                <!-- Footer -->
+                <div th:replace="QuanLySan/includes/footer_QLS::footer"></div>
+                <!-- / Footer -->
+
+                <div class="content-backdrop fade"></div>
+            </div>
+        </div>
+    </div>
+    <div class="layout-overlay layout-menu-toggle"></div>
+</div>
+</body>
+</html>

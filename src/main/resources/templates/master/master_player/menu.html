@@ -1,0 +1,85 @@
+<aside th:fragment="menu" id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a th:href="@{/player/home}" class="app-brand-link">
+      <span class="app-brand-logo demo">
+        <img
+                th:src="@{/assets/img/favicon/logopickleball.png}"
+                alt="Logo"
+                style="width: 70px; height: auto"
+        />
+      </span>
+            <span class="app-brand-text demo menu-text fw-bold ms-1">PickleSpot</span>
+        </a>
+        <a
+                href="javascript:void(0);"
+                class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
+        >
+            <i
+                    class="bx bx-chevron-left bx-sm d-flex align-items-center justify-content-center"
+            ></i>
+        </a>
+    </div>
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- HomePage -->
+        <li class="menu-item active open">
+            <a th:href="@{/player/home}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-smile"></i>
+                <div class="text-truncate" data-i18n="HomePage">Trang chủ</div>
+            </a>
+        </li>
+
+        <!-- Service -->
+        <li class="menu-item">
+            <a th:href="@{/player/datsan}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div class="text-truncate" data-i18n="Service">Đặt Sân</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a th:href="@{/player/muasanpham}" class="menu-link">
+                <i class='menu-icon bx bx-cart-add '></i>
+                <div class="text-truncate" >Mua sản phẩm</div>
+            </a>
+        </li>
+
+        <!-- Front Pages -->
+        <li class="menu-item">
+            <a th:href="@{/player/nhacnho}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-store"></i>
+                <div class="text-truncate" data-i18n="Front Pages">Nhắc nhở</div>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a th:href="@{/player/lienhe}" class="menu-link">
+                <i class="menu-icon bi bi-person-lines-fill"></i>
+                <div class="text-truncate" data-i18n="Contact">Liên Hệ</div>
+                <div
+                        class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto"
+                >
+                    24/24
+                </div>
+            </a>
+        </li>
+    </ul>
+</aside>
+<!-- jQuery Script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let currentPath = window.location.pathname;
+
+        // Duyệt qua tất cả menu link
+        $("ul.menu-inner li a").each(function () {
+            let href = $(this).attr("href");
+
+            if (href && currentPath === href) {
+                $("ul.menu-inner li").removeClass("active");
+                $(this).closest("li").addClass("active open"); // Thêm cả open nếu cần mở rộng
+            }
+        });
+    });
+</script>
+</aside>
