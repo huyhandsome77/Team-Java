@@ -37,7 +37,8 @@ public class SanPham {
 
     public long getMaSanPham() { return maSanPham; }
 
-    public void setMaSanPham(int maSanPham) { this.maSanPham = maSanPham; }
+    public void setMaSanPham(long maSanPham) { this.maSanPham = maSanPham; }
+
 
     public String getTenSanPham() { return tenSanPham; }
 
