@@ -78,7 +78,10 @@
                                                 </p>
                                             </div>
                                             <div class="card-footer">
-                                                <button class="btn btn-primary w-100" onclick="openPopup()">Mua hàng</button>
+                                                <form th:action="@{'/cart/add/' + ${sp.maSanPham}}" method="post">
+                                                    <button type="submit" class="btn btn-primary w-100" th:disabled="${sp.tonKho == 0}">
+                                                        Mua hàng
+                                                    </button>
                                             </div>
                                         </div>
                                     </div>
@@ -108,7 +111,10 @@
                                             </p>
                                         </div>
                                         <div class="card-footer">
-                                            <button class="btn btn-primary w-100" onclick="openPopup()">Mua hàng</button>
+                                            <form th:action="@{'/cart/add/' + ${sp.maSanPham}}" method="post">
+                                                <button type="submit" class="btn btn-primary w-100" th:disabled="${sp.tonKho == 0}">
+                                                    Mua hàng
+                                                </button>
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +143,11 @@
                                                 </p>
                                             </div>
                                             <div class="card-footer">
-                                                <button class="btn btn-primary w-100" onclick="openPopup()">Mua hàng</button>
+                                                <form th:action="@{'/cart/add/' + ${sp.maSanPham}}" method="post">
+                                                    <button type="submit" class="btn btn-primary w-100" th:disabled="${sp.tonKho == 0}">
+                                                        Mua hàng
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

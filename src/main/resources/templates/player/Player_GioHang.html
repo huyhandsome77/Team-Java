@@ -32,9 +32,6 @@
         <h4 class="mb-0">GIỎ HÀNG CỦA BẠN</h4>
     </div>
     <div class="card-body">
-        <!-- Nếu rỗng -->
-        <!-- <p class="text-center text-muted fs-5">Bạn chưa có sản phẩm nào trong giỏ hàng.</p> -->
-
         <!-- Nếu có sản phẩm -->
         <div class="table-responsive">
             <table class="table table-hover align-middle">
@@ -49,19 +46,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td><img src="https://via.placeholder.com/80" class="cart-img" alt="SP"></td>
-                    <td>Bánh mì thịt</td>
-                    <td>25,000 VND</td>
+                <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+                <tr th:each="item : ${cartItems}">
+                    <td><img th:src="@{'/assets/img/elements/SanPham/' + ${item.sanPham.img}}" class="cart-img" alt="SP"></td>
+                    <td th:text="${item.sanPham.tenSanPham}">Tên sản phẩm</td>
+                    <td><span th:text="${#numbers.formatDecimal(item.sanPham.gia, 0, 'COMMA', 3, 'POINT')}"></span> VND</td>
                     <td>
-                        <input type="number" min="1" value="2" class="form-control form-control-sm w-75 text-center mx-auto">
+                        <form th:action="@{/cart/update/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post">
+                            <input type="number" name="quantity" min="1" value="[[${item.soLuong}]]" class="form-control form-control-sm w-75 text-center mx-auto">
+                            <button type="submit" class="btn btn-sm btn-secondary mt-2">Cập nhật</button>
+                        </form>
                     </td>
-                    <td><strong>50,000 VND</strong></td>
                     <td>
-                        <button class="btn btn-sm btn-danger" title="Xoá sản phẩm"><i class="bi bi-trash"></i> Xoá</button>
+                        <strong th:text="${#numbers.formatDecimal(item.sanPham.gia * item.soLuong, 0, 'COMMA', 3, 'POINT')}"></strong> VND
+                    </td>
+                    <td>
+                        <form th:action="@{/cart/remove/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Xoá sản phẩm"><i class="bi bi-trash"></i> Xoá</button>
+                        </form>
                     </td>
                 </tr>
-                <!-- Thêm sản phẩm khác ở đây -->
                 </tbody>
             </table>
         </div>
@@ -71,7 +75,7 @@
             <a href="#" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
             </a>
-            <h5 class="mb-0">Tổng cộng: <span class="text-danger fw-bold">50,000 VND</span></h5>
+            <h5 class="mb-0">Tổng cộng: <span class="text-danger fw-bold" th:text="${total}"></span> VND</h5>
             <a href="#" class="btn btn-primary btn-lg">Thanh toán <i class="bi bi-check-circle ms-1"></i></a>
         </div>
     </div>
