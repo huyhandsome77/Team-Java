@@ -7,6 +7,7 @@ import uth.edu.jpa.models.*;
 import uth.edu.jpa.repositories.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,13 +25,12 @@ public class CartService {
     // Lấy hoặc tạo giỏ hàng mới
     @Transactional
     public Cart getOrCreateCart(User user) {
-        Cart cart = user.getCart();
-        if (cart == null) {
-            cart = new Cart();
-            cart.setUser(user);
-            cartRepo.save(cart);
-        }
-        return cart;
+        return cartRepo.findByUser(user).orElseGet(() -> {
+            Cart newCart = new Cart();
+            newCart.setUser(user);
+            user.setCart(newCart); // << THÊM DÒNG NÀY
+            return cartRepo.save(newCart);
+        });
     }
 
     // Thêm sản phẩm vào giỏ hàng
@@ -38,22 +38,22 @@ public class CartService {
     public void addToCart(User user, Long sanPhamId) {
         Cart cart = getOrCreateCart(user);
         Optional<CartItemEntity> optional = cart.getItems().stream()
-                .filter(item -> item.getSanPham().getMaSanPham() == sanPhamId)
+                .filter(item -> Objects.equals(item.getSanPham().getMaSanPham(), sanPhamId))
                 .findFirst();
 
         if (optional.isPresent()) {
             CartItemEntity item = optional.get();
             item.setSoLuong(item.getSoLuong() + 1);
         } else {
-            SanPham sp = sanPhamRepo.findById(sanPhamId).orElseThrow();
+            SanPham sp = sanPhamRepo.findById(sanPhamId).orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại với ID: " + sanPhamId));
             CartItemEntity item = new CartItemEntity();
             item.setSanPham(sp);
-            item.setSoLuong(1); // Thêm số lượng ban đầu là 1
+            item.setSoLuong(1);
             item.setCart(cart);
             cart.getItems().add(item);
         }
 
-        cartRepo.save(cart);  // Lưu giỏ hàng sau khi thay đổi
+        cartRepo.save(cart);
     }
 
     // Xoá sản phẩm khỏi giỏ hàng
@@ -61,31 +61,31 @@ public class CartService {
     public void removeFromCart(User user, Long sanPhamId) {
         Cart cart = getOrCreateCart(user);
         Optional<CartItemEntity> optional = cart.getItems().stream()
-                .filter(item -> item.getSanPham().getMaSanPham() == sanPhamId)
+                .filter(item -> Objects.equals(item.getSanPham().getMaSanPham(), sanPhamId))
                 .findFirst();
 
         optional.ifPresent(item -> {
             cart.getItems().remove(item);
-            cartItemRepo.delete(item); // Xoá sản phẩm khỏi CartItemRepository
+            cartItemRepo.delete(item);
         });
 
-        cartRepo.save(cart);  // Lưu lại giỏ hàng sau khi xóa
+        cartRepo.save(cart);
     }
 
     // Cập nhật số lượng sản phẩm trong giỏ hàng
     @Transactional
     public void updateQuantity(User user, Long sanPhamId, int quantity) {
         if (quantity < 1) {
-            return; // Không cho phép số lượng dưới 1
+            return;
         }
 
         Cart cart = getOrCreateCart(user);
         cart.getItems().forEach(item -> {
-            if (item.getSanPham().getMaSanPham() == sanPhamId) {
-                item.setSoLuong(quantity); // Cập nhật số lượng
+            if (Objects.equals(item.getSanPham().getMaSanPham(), sanPhamId)) {
+                item.setSoLuong(quantity);
             }
         });
-        cartRepo.save(cart);  // Lưu lại giỏ hàng sau khi cập nhật
+        cartRepo.save(cart);
     }
 
     // Lấy tất cả sản phẩm trong giỏ hàng
@@ -96,7 +96,7 @@ public class CartService {
     // Tính tổng giá trị giỏ hàng
     public double getTotal(User user) {
         return getOrCreateCart(user).getItems().stream()
-                .mapToDouble(item -> item.getSanPham().getGia() * item.getSoLuong()) // Tính tổng giá trị
+                .mapToDouble(item -> item.getSanPham().getGia() * item.getSoLuong())
                 .sum();
     }
 }

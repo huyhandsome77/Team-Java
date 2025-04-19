@@ -20,6 +20,7 @@ public class CartController {
      */
     @PostMapping("/add/{id}")
     public String addToCart(@PathVariable("id") Long sanPhamId) {
+        System.out.println("Adding product with ID: " + sanPhamId);
         User user = SecurityUtils.getCurrentUser();
         cartService.addToCart(user, sanPhamId);
         return "redirect:/cart";
@@ -31,7 +32,7 @@ public class CartController {
     @GetMapping
     public String viewCart(Model model) {
         User user = SecurityUtils.getCurrentUser();
-        model.addAttribute("items", cartService.getCartItems(user));
+        model.addAttribute("cartItems", cartService.getCartItems(user));
         model.addAttribute("total", cartService.getTotal(user));
         return "/player/Player_GioHang";
     }
