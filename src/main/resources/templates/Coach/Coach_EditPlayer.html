@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_coach/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="container mt-5">
+                        <h2 class="text-center text-black fw-bold mb-4">CHỈNH SỬA NGƯỜI CHƠI</h2>
+                        <div th:if="${message}" class="alert alert-danger" role="alert">
+                            <span th:text="${message}"></span>
+                        </div>
+                        <form th:action="@{/coach/players/edit/{id}(id=${player.id})}" th:object="${player}" method="post">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Tên người chơi</label>
+                                <input type="text" class="form-control" id="name" th:field="*{name}" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <a th:href="@{/coach/players}" class="btn btn-secondary">Hủy</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

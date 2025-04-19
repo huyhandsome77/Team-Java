@@ -13,7 +13,11 @@ public class Player {
 
     private String name;
 
-    @OneToMany(mappedBy = "player") // mappedBy trỏ đến thuộc tính "player" trong Booking
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "user_id", referencedColumnName = "userID")
+    private User user;
+
+    @OneToMany(mappedBy = "player")
     private List<Booking> bookings;
 
     // Getters và Setters
@@ -33,11 +37,12 @@ public class Player {
         this.name = name;
     }
 
-    public List<Booking> getBookings() {
-        return bookings;
+    public User getUser() {
+        return user;
     }
 
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
+    public void setUser(User user) {
+        this.user = user;
     }
+
 }

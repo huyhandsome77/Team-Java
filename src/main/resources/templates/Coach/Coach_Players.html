@@ -1,8 +1,6 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="master/head::head">
-
 </head>
 <body>
 <!-- Sidebar -->
@@ -13,12 +11,14 @@
             <div th:replace="master/navbar::navbar"></div>
             <div class="content-wrapper">
                 <!-- Content -->
-
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <th:block th:fragment="content">
-                        <!--Nội dung các trang con thay thế ở đây-->
+                        <!--Nội dung các trang con thay thế ở đây-->
                         <div class="container mt-5">
-                            <h2 class="text-center text-black fw-bold mb-4">QUẢN LÍ NGƯỜI CHƠI</h2>
+                            <h2 class="text-center text-black fw-bold mb-4">QUẢN LÝ NGƯỜI CHƠI</h2>
+                            <div th:if="${message}" class="alert alert-danger" role="alert">
+                                <span th:text="${message}"></span>
+                            </div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover">
                                     <thead class="table-primary">
@@ -33,11 +33,14 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Nguyen Anh Huy</td>
-                                        <td>Huyhandsome@gmail.com</td>
-                                        <td>0123456789</td>
+                                    <tr th:each="player : ${players}">
+                                        <td th:text="${player.id}"></td>
+                                        <td th:text="${player.name}"></td>
+                                        <td>
+                                            <span th:if="${player.user != null}" th:text="${player.user.email}"></span>
+                                            <span th:unless="${player.user != null}">Không có email</span>
+                                        </td>
+                                        <td>Chưa có dữ liệu</td>
                                         <td>
                                             <div class="progress" style="height: 10px;">
                                                 <div class="progress-bar bg-primary" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
@@ -45,32 +48,25 @@
                                         </td>
                                         <td>10%</td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary">Sửa</button>
-                                            <button class="btn btn-sm btn-danger">Xóa</button>
+                                            <a th:href="@{/coach/players/edit/{id}(id=${player.id})}" class="btn btn-sm btn-primary">Sửa</a>
+                                            <form th:action="@{/coach/players/delete/{id}(id=${player.id})}" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa người chơi này?')">Xóa</button>
+                                            </form>
                                         </td>
+                                    </tr>
+                                    <tr th:if="${players == null or players.isEmpty()}">
+                                        <td colspan="7" class="text-center">Không có dữ liệu người chơi.</td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
-
                     </th:block>
                 </div>
                 <!-- / Content -->
-
-                <!-- Footer -->
-
-
-
-                <!-- / Footer -->
             </div>
         </div>
     </div>
 </div>
-
-
-
 </body>
-
 </html>

@@ -10,7 +10,6 @@ import uth.edu.jpa.repositories.PlayerRepository;
 import uth.edu.jpa.repositories.TournamentRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TournamentService {
@@ -19,52 +18,33 @@ public class TournamentService {
     private TournamentRepository tournamentRepository;
 
     @Autowired
-    private PlayerRepository playerRepository;
+    private CourtRepository courtRepository;  // Để truy vấn sân
 
     @Autowired
-    private CourtRepository courtRepository;
+    private PlayerRepository playerRepository;  // Để truy vấn người chơi
 
-    public List<Tournament> getAllTournaments() {
-        return tournamentRepository.findAll();
-    }
-
-    public Tournament getTournamentById(Long id) {
-        return tournamentRepository.findById(id).orElse(null);
-    }
-
+    // Phương thức lấy danh sách các giải đấu sắp tới
     public List<Tournament> getUpcomingTournaments() {
-        return tournamentRepository.findUpcomingTournaments().stream().limit(3).collect(Collectors.toList());
+        return tournamentRepository.findUpcomingTournaments();
     }
 
+    // Phương thức tạo giải đấu
     public Tournament createTournament(Tournament tournament, List<Long> courtIds, List<Long> playerIds) {
-        // Thiết lập các sân thi đấu
-        if (courtIds != null && !courtIds.isEmpty()) {
-            for (Long courtId : courtIds) {
-                Court court = courtRepository.findById(courtId).orElse(null);
-                if (court != null) {
-                    tournament.addCourt(court);
-                }
-            }
-        }
+        // Lấy các sân từ danh sách courtIds
+        List<Court> courts = courtRepository.findAllById(courtIds);
+        // Lấy các người chơi từ danh sách playerIds
+        List<Player> players = playerRepository.findAllById(playerIds);
 
-        // Thiết lập các người chơi tham gia
-        if (playerIds != null && !playerIds.isEmpty()) {
-            for (Long playerId : playerIds) {
-                Player player = playerRepository.findById(playerId).orElse(null);
-                if (player != null) {
-                    tournament.addParticipant(player);
-                }
-            }
-        }
+        // Gán các sân và người chơi vào giải đấu
 
+        // Lưu giải đấu và trả về
         return tournamentRepository.save(tournament);
     }
 
-    public Tournament updateTournament(Tournament tournament) {
-        return tournamentRepository.save(tournament);
-    }
-
+    // Phương thức xóa giải đấu
     public void deleteTournament(Long id) {
         tournamentRepository.deleteById(id);
     }
+
+    // Các phương thức khác của TournamentService nếu có
 }

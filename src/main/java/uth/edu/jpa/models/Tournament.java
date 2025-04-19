@@ -15,6 +15,11 @@ public class Tournament {
 
     private String name;
     private LocalDate startDate;
+
+    // ✅ Thêm trường location để khớp với form HTML
+    private String location;
+
+    // Các trường thêm nếu sau này bạn mở rộng
     private LocalDate endDate;
     private String description;
 
@@ -34,7 +39,8 @@ public class Tournament {
     )
     private Set<Player> participants = new HashSet<>();
 
-    // Getters and setters
+    // ===== Getters and Setters =====
+
     public Long getId() {
         return id;
     }
@@ -57,6 +63,14 @@ public class Tournament {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public LocalDate getEndDate() {
@@ -97,5 +111,29 @@ public class Tournament {
 
     public void addParticipant(Player player) {
         this.participants.add(player);
+    }
+
+    @Override
+    public String toString() {
+        return "Tournament{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", startDate=" + startDate +
+                ", location='" + location + '\'' +
+                ", endDate=" + endDate +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    public boolean isValidTournament() {
+        return startDate != null && endDate != null && !endDate.isBefore(startDate);
+    }
+
+    public boolean hasCourt(Court court) {
+        return courts.contains(court);
+    }
+
+    public boolean hasParticipant(Player player) {
+        return participants.contains(player);
     }
 }

@@ -3,7 +3,9 @@ package uth.edu.jpa.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uth.edu.jpa.models.Player;
+import uth.edu.jpa.models.User;
 import uth.edu.jpa.repositories.PlayerRepository;
+import uth.edu.jpa.repositories.UserRepository;
 
 import java.util.List;
 
@@ -13,31 +15,23 @@ public class PlayerService {
     @Autowired
     private PlayerRepository playerRepository;
 
-    public List<Player> getAllPlayers() {
-        return playerRepository.findAll();
+    @Autowired
+    private UserRepository userRepository; // Thêm UserRepository để truy cập bảng users
+
+    public Player getPlayerByUser(User user) {
+        return playerRepository.findByUser(user);
     }
 
-    public Player getPlayerById(Long id) {
-        return playerRepository.findById(id).orElse(null);
-    }
-
-    public Player createPlayer(Player player) {
-        return playerRepository.save(player);
-    }
-
-    public Player updatePlayer(Player player) {
-        return playerRepository.save(player);
-    }
-
-    public void deletePlayer(Long id) {
-        playerRepository.deleteById(id);
-    }
-
-    public List<Player> searchPlayers(String query) {
-        return playerRepository.findByNameContaining(query);
-    }
-
-    public int countPlayers() {
-        return (int) playerRepository.count();
+    // Thêm phương thức đồng bộ
+    public void syncUsersToPlayers() {
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            if (playerRepository.findByUser(user) == null) {
+                Player player = new Player();
+                player.setUser(user);
+                player.setName(user.getEmail());
+                playerRepository.save(player);
+            }
+        }
     }
 }
