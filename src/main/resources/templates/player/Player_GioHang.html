@@ -1,88 +1,210 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Giỏ hàng của bạn</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .cart-card {
-            max-width: 1000px;
-            margin: 30px auto;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            border-radius: 15px;
-        }
-        .cart-img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .table th, .table td {
-            vertical-align: middle !important;
-        }
-    </style>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" integrity="sha384-ENjdO4Dr2bkBIFxQpeoYz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" rel="stylesheet"/>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
 </head>
 <body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_player/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/master_player/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <!--Nội dung các trang con thay thế ở đây-->
+                        <div class="card cart-card">
+                            <div class="card-header bg-primary text-white text-center">
+                                <h4 class="mb-0">GIỎ HÀNG CỦA BẠN</h4>
+                            </div>
+                            <div class="card-body">
+                                <!-- Nếu có sản phẩm -->
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>Ảnh</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Đơn giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Thành tiền</th>
+                                            <th>Hành động</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!-- Lặp qua các sản phẩm trong giỏ hàng -->
+                                        <tr th:each="item : ${cartItems}">
+                                            <td>
+                                                <img alt="Ảnh sản phẩm"
+                                                     th:src="@{'/assets/img/elements/SanPham/' + ${item.sanPham.img}}"
+                                                     style="width: 70px; height: 70px; object-fit: cover;"
+                                                     class="img-fluid"/>
+                                            </td>
+                                            <td th:text="${item.sanPham.tenSanPham}">Tên sản phẩm</td>
+                                            <td>
+                                                <span th:text="${#numbers.formatDecimal(item.sanPham.gia, 0, 'COMMA', 3, 'POINT')}"></span> VND
+                                            </td>
+                                            <td class="text-center">
+                                                <form th:action="@{/cart/update/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post" class="d-flex flex-column align-items-center">
+                                                    <input class="form-control form-control-sm text-center" style="width: 80px;" min="1" name="quantity" type="number" th:value="${item.soLuong}"/>
+                                                    <button class="btn btn-sm btn-secondary mt-2" type="submit">Cập nhật</button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <strong th:text="${#numbers.formatDecimal(item.sanPham.gia * item.soLuong, 0, 'COMMA', 3, 'POINT')}"></strong> VND
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/cart/remove/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post">
+                                                    <button class="btn btn-sm btn-danger" title="Xoá sản phẩm" type="submit">
+                                                        <i class="bi bi-trash"></i> Xoá
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- Tổng cộng + nút -->
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <a class="btn btn-outline-secondary" th:href="@{/player/muasanpham}">
+                                        <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
+                                    </a>
+                                    <h5 class="mb-0">
+                                        Tổng cộng:
+                                        <span class="text-danger fw-bold" th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 3, 'POINT')}"></span> VND
+                                    </h5>
+                                    <a class="btn btn-primary btn-lg" href="#" onclick="openPopup()">
+                                        Thanh toán <i class="bi bi-check-circle ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
-<div class="card cart-card">
-    <div class="card-header bg-primary text-white text-center">
-        <h4 class="mb-0">GIỎ HÀNG CỦA BẠN</h4>
-    </div>
-    <div class="card-body">
-        <!-- Nếu có sản phẩm -->
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-light">
-                <tr>
-                    <th>Ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Đơn giá</th>
-                    <th>Số lượng</th>
-                    <th>Thành tiền</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- Lặp qua các sản phẩm trong giỏ hàng -->
-                <tr th:each="item : ${cartItems}">
-                    <td><img th:src="@{'/assets/img/elements/SanPham/' + ${item.sanPham.img}}" class="cart-img" alt="SP"></td>
-                    <td th:text="${item.sanPham.tenSanPham}">Tên sản phẩm</td>
-                    <td><span th:text="${#numbers.formatDecimal(item.sanPham.gia, 0, 'COMMA', 3, 'POINT')}"></span> VND</td>
-                    <td>
-                        <form th:action="@{/cart/update/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post">
-                            <input type="number" name="quantity" min="1" th:value="${item.soLuong}" class="form-control form-control-sm w-75 text-center mx-auto">
-                            <button type="submit" class="btn btn-sm btn-secondary mt-2">Cập nhật</button>
-                        </form>
-                    </td>
-                    <td>
-                        <strong th:text="${#numbers.formatDecimal(item.sanPham.gia * item.soLuong, 0, 'COMMA', 3, 'POINT')}"></strong> VND
-                    </td>
-                    <td>
-                        <form th:action="@{/cart/remove/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post">
-                            <button type="submit" class="btn btn-sm btn-danger" title="Xoá sản phẩm"><i class="bi bi-trash"></i> Xoá</button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-- Popup địa chỉ-->
+                        <div class="popup-overlay" id="popupForm">
+                            <div class="popup-content">
+                                <span class="close-btn" onclick="closePopup()">&times;</span>
+                                <h3 class="popup-title">Thông tin nhận hàng</h3>
+                                <form th:action="@{/cart/checkout}" method="post">
+                                    <div class="form-group">
+                                        <label for="fullname">Họ tên</label>
+                                        <input type="text" id="fullname" name="fullname" placeholder="Nguyễn Văn A" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại</label>
+                                        <input type="tel" id="phone" name="phone" placeholder="0123 456 789" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ nhận hàng</label>
+                                        <textarea id="address" name="address" rows="3" placeholder="Số 1, đường ABC, quận XYZ..." required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="note">Ghi chú (nếu có)</label>
+                                        <textarea id="note" name="note" rows="2" placeholder="Giao giờ hành chính..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Xác nhận đặt hàng</button>
+                                </form>
+                            </div>
+                        </div>
+                        <style>
+                            .popup-overlay {
+                                display: none;
+                                position: fixed;
+                                top: 0; left: 0;
+                                width: 100vw; height: 100vh;
+                                background-color: rgba(0, 0, 0, 0.5);
+                                z-index: 9999;
+                                justify-content: center;
+                                align-items: center;
+                            }
 
-        <!-- Tổng cộng + nút -->
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <a th:href="@{/player/muasanpham}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
-            </a>
-            <h5 class="mb-0">Tổng cộng: <span class="text-danger fw-bold" th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 3, 'POINT')}"></span> VND</h5>
-            <a href="#" class="btn btn-primary btn-lg">Thanh toán <i class="bi bi-check-circle ms-1"></i></a>
+                            .popup-content {
+                                background-color: #fff;
+                                padding: 30px 25px;
+                                border-radius: 15px;
+                                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+                                width: 90%;
+                                max-width: 500px;
+                                position: relative;
+                                animation: fadeIn 0.4s ease;
+                            }
+
+                            .popup-title {
+                                font-size: 24px;
+                                font-weight: bold;
+                                text-align: center;
+                                margin-bottom: 20px;
+                                font-family: 'Poppins', sans-serif;
+                            }
+
+                            .form-group {
+                                margin-bottom: 15px;
+                            }
+
+                            .form-group label {
+                                font-weight: 600;
+                                margin-bottom: 6px;
+                                display: block;
+                            }
+
+                            .form-group input,
+                            .form-group textarea {
+                                width: 100%;
+                                padding: 10px 14px;
+                                border: 1px solid #ccc;
+                                border-radius: 8px;
+                                font-size: 14px;
+                            }
+
+                            .close-btn {
+                                position: absolute;
+                                top: 12px;
+                                right: 20px;
+                                font-size: 24px;
+                                color: #888;
+                                cursor: pointer;
+                                transition: color 0.2s;
+                            }
+
+                            .close-btn:hover {
+                                color: #000;
+                            }
+
+                            @keyframes fadeIn {
+                                from { transform: scale(0.9); opacity: 0; }
+                                to { transform: scale(1); opacity: 1; }
+                            }
+                        </style>
+                        <script>
+                            function openPopup() {
+                                document.getElementById("popupForm").style.display = "flex";
+                            }
+
+                            function closePopup() {
+                                document.getElementById("popupForm").style.display = "none";
+                            }
+
+                            // Tắt popup khi nhấn ngoài
+                            window.addEventListener("click", function (e) {
+                                const popup = document.getElementById("popupForm");
+                                if (e.target === popup) {
+                                    closePopup();
+                                }
+                            });
+                        </script>
+                    </th:block>
+                </div>
+                <!-- / Content -->
+                <!-- Footer -->
+                <div th:replace="master/master_player/footer::footer"></div>
+                <!-- / Footer -->
+            </div>
         </div>
     </div>
 </div>
-
-<!-- Bootstrap icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
+<script crossorigin="anonymous" integrity="sha384-QFh6fZ6X+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<script th:replace="master/hoaroi::hoaroi"></script>
 </body>
 </html>

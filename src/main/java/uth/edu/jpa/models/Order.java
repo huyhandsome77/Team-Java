@@ -1,61 +1,100 @@
 package uth.edu.jpa.models;
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "orders")
-public abstract class Order {
+@Table(name = "orders") // It's good practice to specify the table name
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "userID")
+    private double totalAmount;
+    private LocalDateTime createdAt;
+    private String bankCode;
+    private String payDate;
+    private OrderStatus status;
+
+    public enum OrderStatus {
+        PENDING, // Đơn hàng mới được thanh toán thành công, đang chờ xử lý
+        COMPLETED, // Đơn hàng đã hoàn thành
+        CANCELLED, // Đơn hàng đã bị huỷ
+        FAILED; // Đơn hàng thanh toán thất bại
+    }
+
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "delivery_address_id")
+    private DeliveryAddress deliveryAddress;
+
+    @ManyToOne // Assuming many orders can belong to one user
+    @JoinColumn(name = "user_id") // Foreign key column in the orders table
     private User user;
 
-    private LocalDateTime orderDate;
+    // Getters & setters
+    public OrderStatus getStatus() {
+        return status;
+    }
 
-    private double price;
-
-    private String status;
-
-    // Constructors
-    public Order() {}
-
-    public Order(User user, LocalDateTime orderDate, double price, String status) {
-        this.user = user;
-        this.orderDate = orderDate;
-        this.price = price;
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
-    // Getters và Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public LocalDateTime getOrderDate() { return orderDate; }
-    public void setOrderDate(LocalDateTime orderDate) { this.orderDate = orderDate; }
+    public double getTotalAmount() {
+        return totalAmount;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public void setTotalAmount(Long totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", user=" + user +
-                ", orderDate=" + orderDate +
-                ", price=" + price +
-                ", status='" + status + '\'' +
-                '}';
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode;
+    }
+
+    public String getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(String payDate) {
+        this.payDate = payDate;
+    }
+
+    public DeliveryAddress getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public void setDeliveryAddress(DeliveryAddress deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

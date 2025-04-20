@@ -99,4 +99,22 @@ public class CartService {
                 .mapToDouble(item -> item.getSanPham().getGia() * item.getSoLuong())
                 .sum();
     }
+
+    // Xoá toàn bộ sản phẩm trong giỏ hàng
+    @Transactional
+    public void clearCart(User user) {
+        Cart cart = getOrCreateCart(user);
+        List<CartItemEntity> items = cart.getItems();
+
+        // Xoá từng item trong giỏ hàng khỏi database
+        for (CartItemEntity item : items) {
+            cartItemRepo.delete(item);
+        }
+
+        // Xoá hết khỏi danh sách trong cart
+        items.clear();
+
+        cartRepo.save(cart);
+    }
+
 }

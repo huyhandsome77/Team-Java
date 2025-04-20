@@ -26,7 +26,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
                     response.sendRedirect("/QuanLySan");
                     return;
                 case "ROLE_COACH":
-                    response.sendRedirect("/coach/home");
+                    response.sendRedirect("/coach/dashboard");
                     return;
                 case "ROLE_PLAYER":
                     response.sendRedirect("/player/home");
