@@ -57,8 +57,10 @@ public class CartController {
      * Hiển thị giỏ hàng của người dùng
      */
     @GetMapping
-    public String viewCart(Model model) {
+    public String viewCart(Model model, HttpSession session) {
         User user = SecurityUtils.getCurrentUser();
+        int quantity = cartService.getTotalQuantity(user);
+        model.addAttribute("soLuongTrongGio", quantity);
         model.addAttribute("cartItems", cartService.getCartItems(user));
         model.addAttribute("total", cartService.getTotal(user));
         return "/player/Player_GioHang";
@@ -156,54 +158,6 @@ public class CartController {
             throw new RuntimeException("Lỗi mã hóa URL", e);
         }
     }
-
-
-//    @GetMapping("/payment/vnpay_return")
-//    public String vnpayReturn(HttpServletRequest request, HttpSession session, RedirectAttributes redirectAttributes) {
-//        // Lấy các tham số trả về từ VNPAY
-//        String vnp_ResponseCode = request.getParameter("vnp_ResponseCode");
-//        String vnp_TxnRef = request.getParameter("vnp_TxnRef");
-//        String vnp_Amount = request.getParameter("vnp_Amount");
-//
-//        // Kiểm tra mã phản hồi của giao dịch
-//        if ("00".equals(vnp_ResponseCode)) {
-//            // Thanh toán thành công
-//            // Lấy thông tin đơn hàng, ví dụ từ session
-//            Long deliveryId = (Long) session.getAttribute("deliveryAddressId");
-//            double total = (double) session.getAttribute("total");
-//            User user = SecurityUtils.getCurrentUser();
-//
-//            // Lưu đơn hàng vào DB
-//            Order order = new Order();
-//            order.setUser(user);
-//            order.setTotalAmount(Math.round(total));  // Đảm bảo số tiền được làm tròn
-//            DeliveryAddress delivery = deliveryAddressRepository.findById(deliveryId).orElse(null);
-//            if (delivery == null) {
-//                redirectAttributes.addFlashAttribute("error", "Không tìm thấy địa chỉ giao hàng.");
-//                return "redirect:/cart";
-//            }
-//            order.setDeliveryAddress(delivery);
-//            order.setBankCode(vnp_TxnRef);  // Lưu mã giao dịch VNPAY
-//            order.setStatus(Order.OrderStatus.PENDING);  // Trạng thái thanh toán chưa xử lý (có thể là "PENDING" hoặc "COMPLETED")
-//
-//            // Lưu đơn hàng vào cơ sở dữ liệu
-//            orderService.saveOrder(order);
-//
-//            // Xoá giỏ hàng
-//            cartService.clearCart(user);
-//
-//            // Thông báo thành công
-//            redirectAttributes.addFlashAttribute("message", "Thanh toán thành công!");
-//        } else {
-//            // Thanh toán thất bại
-//            redirectAttributes.addFlashAttribute("message", "Thanh toán thất bại! Vui lòng thử lại.");
-//        }
-//
-//        // Chuyển hướng đến trang kết quả thanh toán
-//        return "redirect:/payment/payment-result";  // Điều hướng tới trang kết quả thanh toán
-//    }
-
-
 
 
 }

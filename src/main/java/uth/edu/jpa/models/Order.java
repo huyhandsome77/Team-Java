@@ -17,10 +17,21 @@ public class Order {
     private OrderStatus status;
 
     public enum OrderStatus {
-        PENDING, // Đơn hàng mới được thanh toán thành công, đang chờ xử lý
-        COMPLETED, // Đơn hàng đã hoàn thành
-        CANCELLED, // Đơn hàng đã bị huỷ
-        FAILED; // Đơn hàng thanh toán thất bại
+        PENDING,
+        PACKAGING, // Đang đóng gói
+        DELIVERED; // Đã giao
+        public String getStatusLabel() {
+            switch (this) {
+                case PENDING:
+                    return "Đang chờ xử lí";
+                case PACKAGING:
+                    return "Đang đóng gói";
+                case DELIVERED:
+                    return "Đã giao";
+                default:
+                    return "Đang chờ xử lí";
+            }
+        }
     }
 
 

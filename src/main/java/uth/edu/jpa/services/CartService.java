@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.lang.Long.sum;
+
 @Service
 public class CartService {
 
@@ -21,6 +23,17 @@ public class CartService {
 
     @Autowired
     private SanPhamRepository sanPhamRepo;
+
+    public int getTotalQuantity(User user) {
+        Optional<Cart> optionalCart = cartRepo.findByUser(user);
+        if (optionalCart.isPresent()) {
+            Cart cart = optionalCart.get();
+            List<CartItemEntity> items = cart.getItems(); // Lấy danh sách sản phẩm
+            return items.stream().mapToInt(CartItemEntity::getSoLuong).sum();
+        }
+        return 0;
+    }
+
 
     // Lấy hoặc tạo giỏ hàng mới
     @Transactional
