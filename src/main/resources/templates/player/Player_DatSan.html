@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #1E3A8A;
+        }
+        .card {
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .btn-custom {
+            background-color: #1F2937;
+            color: white;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .btn-custom:hover {
+            background-color: #111827;
+        }
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-footer {
+            background-color: white;
+            border-top: none;
+        }
+
+        .star-rating input[type="radio"] {
+            display: none;
+        }
+        .star-rating label {
+            color: gray;
+            cursor: pointer;
+        }
+        .star-rating input[type="radio"]:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_player/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/master_player/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-y">
+                    <div class="container mt-2">
+                        <div class="row row-cols-1 row-cols-md-3 g-4">
+                        <div class="col" th:each="san : ${dsSan}">
+                            <div class="card h-100">
+                                <img th:src="${san.image}" class="card-img-top" alt="Hình ảnh sân">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${san.courtName}">Tên sân</h5>
+                                    <p class="card-text">
+                                        Trạng thái:
+                                        <span th:text="${san.status}" th:classappend="${san.status == 'Hoạt động'} ? 'text-success fw-bold' : (${san.status == 'Không hoạt động'} ? 'text-danger fw-bold' : 'text-warning fw-bold' )"></span>
+                                    </p>
+
+                                    <p class="card-text ">
+                                        <span class="fw-bold" th:text="${#numbers.formatDecimal(san.diemTrungBinh, 1, 'COMMA', 1, 'POINT')}">  </span>
+                                        <i class=" text-warning fas fa-star"></i>
+                                    </p>
+
+                                    <p class="card-text">
+
+                                        Giá thuê: <span class="fw-bold" th:text="${#numbers.formatDecimal(san.rentalPrice, 0, 'COMMA', 0, 'POINT')}"></span> VND
+                                    </p>
+
+<!--                                    disable button datsanngay khi khong hoat dong va bao tri-->
+                                    <a href="#"
+                                       class="btn btn-success"
+                                       th:if="${san.status == 'Hoạt động'}"
+                                       th:attr="data-bs-toggle='modal', data-bs-target='#datsanmodal__' + ${san.courtId}">
+                                        Đặt Sân Ngay!!
+                                    </a>
+                                    <a href="#"
+                                       class="btn btn-success disabled"
+                                       th:unless="${san.status == 'Hoạt động'}"
+                                       title="Sân hiện không thể đặt do không hoạt động hoặc đang bảo trì">
+                                        Đặt Sân Ngay!!
+                                    </a>
+                                    <a href="#" class="btn btn-warning ms-2"
+                                       th:attr="data-bs-toggle='modal', data-bs-target='#ratingModal__' + ${san.courtId}">
+                                        Đánh Giá
+                                    </a>
+                                    <!-- Modal đánh giá -->
+                                    <div class="modal fade" th:id="'ratingModal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form th:action="@{'/danhgia/' + ${san.courtId}}" method="post">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title"><span th:text="${san.courtName}"></span></h5>
+                                                    </div>
+                                                    <div class="modal-body">
+
+                                                        <div class="star-rating mb-3 text-center" style="font-size: 2rem;" th:attr="data-court-id=${san.courtId}">
+                                                            <span class="star text-secondary" th:each="i : ${#numbers.sequence(1,5)}" th:attr="data-value=${i}, data-court-id=${san.courtId}" style="cursor: pointer;">★</span>
+                                                        </div>
+
+                                                        <input type="hidden" name="rating" th:id="'ratingValue__' + ${san.courtId}" value="0"/>
+
+                                                        <!-- Comment -->
+                                                        <div class="mb-3">
+                                                            <label  class="form-label">Nhận xét của bạn:</label>
+                                                            <textarea class="form-control" name="comment" rows="3" placeholder="Ghi nhận xét tại đây..."></textarea>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer d-flex justify-content-end gap-2 ">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                        <button id="submitBtn" type="submit" class="btn btn-primary">Đồng ý</button>
+                                                    </div>
+
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal cảm ơn -->
+                                    <div class="modal fade" id="thanksModal" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content text-center" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border: none;">
+                                                <div class="modal-header" style="border-bottom: none; justify-content: center; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                                </div>
+                                                <div class="modal-body" style="padding: 40px; position: relative; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                                                    <div class="rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                                                         style="width: 80px; height: 80px; margin: 0 auto; font-size: 40px; animation: scaleUp 0.5s ease-in-out;">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                    <p class="fs-5 text-muted mt-3">
+                                                        Chúng tôi rất trân trọng đánh giá của bạn về sân. <br> Cảm ơn bạn đã dành thời gian!
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer justify-content-center" style="border-top: none; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                                                    <button class="btn btn-success" data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script th:inline="javascript">
+                                        var showThanks = /*[[${showThanks}]]*/ 'false';
+                                        if (showThanks === 'true') {
+                                            new bootstrap.Modal(document.getElementById('thanksModal')).show();
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Lặp qua tất cả các sân
+                            const stars = document.querySelectorAll('.star-rating .star');
+                            const submitButton = document.querySelector('#submitBtn');
+                            const hiddenInputs = document.querySelectorAll('input[name="rating"]');
+
+                            function updateStars(courtId, value) {
+                                const courtStars = document.querySelectorAll(`.star-rating[data-court-id='${courtId}'] .star`);
+                                courtStars.forEach(star => {
+                                    const starValue = parseInt(star.getAttribute('data-value'));
+                                    if (starValue <= value) {
+                                        star.classList.remove('text-secondary');
+                                        star.classList.add('text-warning');
+                                    } else {
+                                        star.classList.remove('text-warning');
+                                        star.classList.add('text-secondary');
+                                    }
+                                });
+                            }
+
+                            function checkRating() {
+                                hiddenInputs.forEach(hiddenInput => {
+                                    const submitBtn = hiddenInput.closest('.modal').querySelector('.modal-footer button[type="submit"]');
+                                    if (parseInt(hiddenInput.value) > 0) {
+                                        submitBtn.disabled = false;
+                                    } else {
+                                        submitBtn.disabled = true;
+                                    }
+                                });
+                            }
+
+                            stars.forEach(star => {
+                                star.addEventListener('click', function () {
+                                    const courtId = star.getAttribute('data-court-id');
+                                    const value = parseInt(star.getAttribute('data-value'));
+                                    const hiddenInput = document.querySelector(`#ratingValue__${courtId}`);
+                                    hiddenInput.value = value;
+                                    updateStars(courtId, value);
+                                    checkRating();
+                                });
+                            });
+
+                            checkRating();
+                        });
+                    </script>
+                    <!-- / Content -->
+                </div>
+                <div th:replace="master/master_player/footer::footer"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

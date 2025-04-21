@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <div th:replace="master/master_player/menu::menu"></div>
+    <div class="layout-page">
+      <div th:replace="master/master_player/navbar::navbar"></div>
+      <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <th:block th:fragment="content">
+            <!--Nội dung các trang con thay thế ở đây-->
+            <div class="container mt-2">
+              <h2 class="text-center fw-bold mb-4">Nhắc Nhở Lịch Hẹn</h2>
+
+              <div class="card">
+                <div class="card-header bg-primary text-white">
+                  Lịch hẹn sắp tới
+                </div>
+                <div class="card-body min-vh-100">
+                  <table class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Khách hàng</th>
+                      <th>Ngày hẹn</th>
+                      <th>Giờ</th>
+                      <th>Ghi chú</th>
+                      <th>Trạng thái</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Lặp qua danh sách appointments -->
+                    <tr th:each="appointment, stat : ${appointments}">
+                      <td th:text="${stat.count}"></td>
+                      <td th:text="${appointment.fullname}"></td>
+                      <td th:text="${#dates.format(appointment.appointmentDate, 'dd/MM/yyyy')}"></td>
+                      <td th:text="${#dates.format(appointment.appointmentTime, 'HH:mm')}"></td>
+                      <td th:text="${appointment.message}"></td>
+                      <td>
+                            <span th:if="${appointment.hoursUntil >= 0}">
+                                Còn <span th:text="${appointment.hoursUntil}"></span> giờ
+                                <span th:text="${appointment.minutesUntil}"></span> phút đến lịch hẹn
+                            </span>
+                        <span th:unless="${appointment.hoursUntil >= 0}" class="text-danger">
+                                Đã qua lịch hẹn
+                            </span>
+                      </td>
+                    </tr>
+
+                    <!-- Hiển thị nếu không có lịch hẹn -->
+                    <tr th:if="${#lists.isEmpty(appointments)}">
+                      <td colspan="6" class="text-center">Không có lịch hẹn nào.</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </th:block>
+        </div>
+        <!-- / Content -->
+
+        <!-- Footer -->
+        <div th:replace="master/master_player/footer::footer"></div>
+        <!-- / Footer -->
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

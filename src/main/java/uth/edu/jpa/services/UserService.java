@@ -1,46 +1,40 @@
 package uth.edu.jpa.services;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uth.edu.jpa.models.User;
-import uth.edu.jpa.models.User.Role;
 import uth.edu.jpa.repositories.UserRepository;
-
-import java.util.Optional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder(); // Dùng BCrypt để mã hóa
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    public void addUser (User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
     }
-
-    public User registerUser(String username, String rawPassword, String email, String fullname, Role role) {
-        if (userRepository.existsByUsername(username)) {
-            throw new RuntimeException("Username đã tồn tại!");
+    public void deleteUser (int id) {
+        userRepository.deleteById(id);
+    }
+    public User updateUser (User user) {
+        // Kiểm tra xem người dùng có nhập mật khẩu mới hay không
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            // Mã hóa mật khẩu mới
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
+        } else {
+            // Nếu không có mật khẩu mới, giữ nguyên mật khẩu cũ
+            User existingUser  = userRepository.findById(user.getUserID()).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
+            user.setPassword(existingUser .getPassword());
         }
-        if (userRepository.existsByEmail(email)) {
-            throw new RuntimeException("Email đã tồn tại!");
-        }
 
-        String encodedPassword = passwordEncoder.encode(rawPassword); // Mã hóa mật khẩu
-        User newUser = new User(username, encodedPassword, email, fullname, role);
-        return userRepository.save(newUser); // Lưu vào database
-    }
-
-    public Optional<User> getUserById(int id) {
-        return userRepository.findById(id);
-    }
-
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public boolean checkPassword(String rawPassword, String encodedPassword) {
-        return passwordEncoder.matches(rawPassword, encodedPassword);
+        return userRepository.save(user);
     }
 }

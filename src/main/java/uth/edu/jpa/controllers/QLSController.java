@@ -97,18 +97,21 @@ public class QLSController {
             model.addAttribute("court", optionalCourt.get());
             return "QuanLySan/QuanLySan_Dashboard";
         }
-        return "redirect:/QuanLySan/";
+        return "redirect:/QuanLySan";
     }
 
-    // Xử lý cập nhật sân
+    // Xử lý cập nhật status
     @PostMapping("/edit/{id}")
-    public String updateCourt(@PathVariable Long id, @ModelAttribute QLSModel court) {
-        if (qlsRepository.existsById(id)) {
-            court.setCourtId(id);
+    public String updateCourtStatus(@PathVariable Long id, @RequestParam("status") String status) {
+        Optional<QLSModel> optionalCourt = qlsRepository.findById(id);
+        if (optionalCourt.isPresent()) {
+            QLSModel court = optionalCourt.get();
+            court.setStatus(status);
             qlsRepository.save(court);
         }
-        return "redirect:/QuanLySan/";
+        return "redirect:/QuanLySan";
     }
+
 
     // Xử lý xóa sân
     @GetMapping("/delete/{id}")
@@ -116,6 +119,7 @@ public class QLSController {
         qlsRepository.deleteById(id);
         return "redirect:/QuanLySan";
     }
+
 
 }
 
