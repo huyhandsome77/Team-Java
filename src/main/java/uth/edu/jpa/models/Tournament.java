@@ -8,20 +8,13 @@ import java.util.Set;
 @Entity
 @Table(name = "tournaments")
 public class Tournament {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    private LocalDate startDate;
-
-    // ✅ Thêm trường location để khớp với form HTML
     private String location;
-
-    // Các trường thêm nếu sau này bạn mở rộng
-    private LocalDate endDate;
-    private String description;
+    private LocalDate startDate;
 
     @ManyToMany
     @JoinTable(
@@ -39,8 +32,11 @@ public class Tournament {
     )
     private Set<Player> participants = new HashSet<>();
 
-    // ===== Getters and Setters =====
 
+    // Constructors
+    public Tournament() {}
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -57,14 +53,6 @@ public class Tournament {
         this.name = name;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -73,20 +61,12 @@ public class Tournament {
         this.location = location;
     }
 
-    public LocalDate getEndDate() {
-        return endDate;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public Set<Court> getCourts() {
@@ -105,35 +85,10 @@ public class Tournament {
         this.participants = participants;
     }
 
-    public void addCourt(Court court) {
-        this.courts.add(court);
-    }
 
-    public void addParticipant(Player player) {
-        this.participants.add(player);
-    }
 
-    @Override
-    public String toString() {
-        return "Tournament{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", startDate=" + startDate +
-                ", location='" + location + '\'' +
-                ", endDate=" + endDate +
-                ", description='" + description + '\'' +
-                '}';
-    }
 
-    public boolean isValidTournament() {
-        return startDate != null && endDate != null && !endDate.isBefore(startDate);
-    }
 
-    public boolean hasCourt(Court court) {
-        return courts.contains(court);
-    }
 
-    public boolean hasParticipant(Player player) {
-        return participants.contains(player);
-    }
+
 }

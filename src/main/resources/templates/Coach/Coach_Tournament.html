@@ -11,91 +11,98 @@
             <div class="content-wrapper">
                 <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <div class="container py-5">
-                        <h2 class="text-center text-black fw-bold mb-4">QUẢN LÍ GIẢI ĐẤU PICKELBALL</h2>
+                    <div class="container mt-5">
+                        <!-- Tiêu đề -->
+                        <h1 class="text-center text-black">QUẢN LÍ GIẢI ĐẤU PICKLEBALL</h1>
 
-                        <!-- Hiển thị thông báo -->
-                        <div th:if="${message}" class="alert alert-info text-center fw-bold" role="alert"
-                             th:text="${message}"></div>
+                        <!-- Thông báo -->
+                        <div th:if="${message}" class="alert alert-info" role="alert">
+                            <span th:text="${message}"></span>
+                        </div>
 
                         <!-- Form tạo giải đấu -->
-                        <div class="card shadow-sm p-4 mb-4">
-                            <h4 class="mb-3">Tạo Giải Đấu</h4>
-                            <form th:action="@{/coach/tournament}" method="post" th:object="${tournament}">
-                                <input type="hidden" th:field="*{id}"/>
-
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Tên Giải Đấu:</label>
-                                    <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Nhập tên giải đấu">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="startDate" class="form-label">Ngày Tổ Chức:</label>
-                                    <input type="date" id="startDate" th:field="*{startDate}" class="form-control">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="location" class="form-label">Địa Điểm:</label>
-                                    <input type="text" id="location" th:field="*{location}" class="form-control" placeholder="Nhập địa điểm tổ chức">
-                                </div>
-
-                                <!-- Chọn sân -->
-                                <div class="mb-3">
-                                    <label class="form-label">Chọn Sân:</label>
-                                    <select name="courtIds" multiple class="form-select">
-                                        <option th:each="c : ${courts}" th:value="${c.id}" th:text="${c.name}"></option>
-                                    </select>
-                                </div>
-
-                                <!-- Chọn người chơi -->
-                                <div class="mb-3">
-                                    <label class="form-label">Chọn Người Chơi:</label>
-                                    <select name="playerIds" multiple class="form-select">
-                                        <option th:each="p : ${players}" th:value="${p.id}" th:text="${p.name}"></option>
-                                    </select>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary fw-bold w-100">Tạo Giải Đấu</button>
-                            </form>
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h2>Tạo Giải Đấu</h2>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/coach/tournament}" th:object="${tournament}" method="post">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">TÊN GIẢI ĐẤU:</label>
+                                        <input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Nhập tên giải đấu" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="startDate" class="form-label">NGÀY TỔ CHỨC:</label>
+                                        <input type="date" th:field="*{startDate}" id="startDate" class="form-control" th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">ĐỊA ĐIỂM:</label>
+                                        <input type="text" th:field="*{location}" id="location" class="form-control" placeholder="Nhập địa điểm tổ chức" required/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="courts" class="form-label">Chọn Sân:</label>
+                                        <select id="courts" name="courtIds" multiple class="form-select" required>
+                                            <option th:each="c : ${courts}" th:value="${c.id}" th:text="${c.name}"></option>
+                                            <option th:if="${#lists.isEmpty(courts)}" disabled>Không có sân nào</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="players" class="form-label">Chọn Người Chơi:</label>
+                                        <select id="players" name="playerIds" multiple class="form-select" required>
+                                            <option th:each="p : ${players}" th:value="${p.id}" th:text="${p.name}"></option>
+                                            <option th:if="${#lists.isEmpty(players)}" disabled>Không có người chơi nào</option>
+                                        </select>
+                                        <div th:if="${#lists.isEmpty(players)}" class="text-danger">
+                                            Không tìm thấy người chơi trong danh sách.
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Tạo Giải Đấu</button>
+                                </form>
+                            </div>
                         </div>
 
                         <!-- Danh sách giải đấu -->
-                        <div class="card shadow-sm p-4">
-                            <h4 class="mb-3">Danh sách Giải Đấu</h4>
-                            <table class="table table-bordered">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>TÊN GIẢI ĐẤU</th>
-                                    <th>NGÀY</th>
-                                    <th>ĐỊA ĐIỂM</th>
-                                    <th>HÀNH ĐỘNG</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="t : ${tournaments}">
-                                    <td th:text="${t.id}"></td>
-                                    <td th:text="${t.name}"></td>
-                                    <td th:text="${#dates.format(t.startDate, 'dd/MM/yyyy')}"></td>
-                                    <td th:text="${t.location}"></td>
-                                    <td>
-                                        <a th:href="@{'/coach/tournament/edit/' + ${t.id}}" class="btn btn-sm btn-warning">Sửa</a>
-                                        <a th:href="@{'/coach/tournament/delete/' + ${t.id}}" class="btn btn-sm btn-danger"
-                                           onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h2>DANH SÁCH GIẢI ĐẤU</h2>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped table-hover table-bordered align-middle">
+                                    <thead class="table-primary text-primary">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>TÊN GIẢI ĐẤU</th>
+                                        <th>NGÀY</th>
+                                        <th>ĐỊA ĐIỂM</th>
+                                        <th>HÀNH ĐỘNG</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="t : ${tournaments}">
+                                        <td th:text="${t.id}"></td>
+                                        <td th:text="${t.name}"></td>
+                                        <td th:text="${t.startDate}"></td>
+                                        <td th:text="${t.location}"></td>
+                                        <td>
 
+                                            <a th:href="@{/coach/tournament/delete(id=${t.id})}" class="btn btn-danger btn-sm" aria-label="Xóa giải đấu">
+                                                <i class="bi bi-trash"></i> Xóa
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr th:if="${#lists.isEmpty(tournaments)}">
+                                        <td colspan="5" class="text-center">Không có giải đấu nào sắp tới.</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- / Content -->
             </div>
         </div>
     </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

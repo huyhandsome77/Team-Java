@@ -6,7 +6,8 @@ import uth.edu.jpa.models.Player;
 import uth.edu.jpa.models.User;
 import uth.edu.jpa.repositories.PlayerRepository;
 import uth.edu.jpa.repositories.UserRepository;
-
+import uth.edu.jpa.models.User.Role;
+import java.util.Optional;
 import java.util.List;
 
 @Service
@@ -16,22 +17,43 @@ public class PlayerService {
     private PlayerRepository playerRepository;
 
     @Autowired
-    private UserRepository userRepository; // Thêm UserRepository để truy cập bảng users
+    private UserRepository userRepository;
 
-    public Player getPlayerByUser(User user) {
-        return playerRepository.findByUser(user);
-    }
-
-    // Thêm phương thức đồng bộ
     public void syncUsersToPlayers() {
         List<User> users = userRepository.findAll();
         for (User user : users) {
-            if (playerRepository.findByUser(user) == null) {
+            boolean exists = playerRepository.existsByUserUserID(user.getUserID());
+            if (user.getRole() == Role.PLAYER && !exists) {
                 Player player = new Player();
+                player.setName(user.getFullname());
+                player.setEmail(user.getEmail());
+                player.setPhone("Chưa có số");
                 player.setUser(user);
-                player.setName(user.getEmail());
                 playerRepository.save(player);
             }
+        }
+    }
+
+    public Optional<Player> findById(Long id) {
+        return playerRepository.findById(id);
+    }
+
+    public List<Player> getAllPlayers() {
+        return playerRepository.findAll();
+    }
+
+
+    public void updatePlayer(Player player) throws Exception {
+        Optional<Player> existingPlayerOpt = playerRepository.findById(player.getId());
+        if (existingPlayerOpt.isPresent()) {
+            Player existingPlayer = existingPlayerOpt.get();
+            existingPlayer.setName(player.getName());
+            existingPlayer.setEmail(player.getEmail());
+            existingPlayer.setPhone(player.getPhone());
+            existingPlayer.setUser(player.getUser());
+            playerRepository.save(existingPlayer);
+        } else {
+            throw new Exception("Người chơi không tồn tại");
         }
     }
 }

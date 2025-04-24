@@ -25,12 +25,16 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OrderService orderService;
+
 
     @GetMapping("/quanlibanhang")
     public String adminQuanlybanhang(Model model) {
         List<SanPham> danhSachSanPham = sanPhamService.findAll();  // Lấy danh sách sản phẩm từ service
         model.addAttribute("sanPhamList", danhSachSanPham);  // Thêm danh sách sản phẩm vào model
-
+        List<Order> orders = orderService.getAllOrders(); // hoặc theo user nếu cần
+        model.addAttribute("orders", orders);
         return "admin/admin_salesmanagement";  // Trả về view
     }
     @GetMapping("/quanlitaikhoan")
@@ -42,3 +46,6 @@ public class AdminController {
 
 
 }
+
+
+

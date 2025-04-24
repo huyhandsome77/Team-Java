@@ -14,4 +14,5 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
     @Query("SELECT t FROM Tournament t WHERE t.startDate >= CURRENT_DATE ORDER BY t.startDate ASC")
     List<Tournament> findUpcomingTournaments();
 
+
 }

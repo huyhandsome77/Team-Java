@@ -6,6 +6,7 @@ import uth.edu.jpa.models.Court;
 import uth.edu.jpa.repositories.CourtRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourtService {
@@ -13,23 +14,35 @@ public class CourtService {
     @Autowired
     private CourtRepository courtRepository;
 
+    /**
+     * Trả về toàn bộ danh sách sân.
+     */
     public List<Court> getAllCourts() {
         return courtRepository.findAll();
     }
 
+    /**
+     * Tìm sân theo ID.
+     */
     public Court getCourtById(Long id) {
         return courtRepository.findById(id).orElse(null);
     }
 
-    public Court createCourt(Court court) {
+    /**
+     * Tạo mới hoặc cập nhật sân.
+     */
+    public Court saveCourt(Court court) {
         return courtRepository.save(court);
     }
 
-    public Court updateCourt(Court court) {
-        return courtRepository.save(court);
-    }
-
-    public void deleteCourt(Long id) {
-        courtRepository.deleteById(id);
+    /**
+     * Xoá sân theo ID.
+     */
+    public boolean deleteCourt(Long id) {
+        if (courtRepository.existsById(id)) {
+            courtRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

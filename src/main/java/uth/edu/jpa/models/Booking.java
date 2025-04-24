@@ -14,17 +14,17 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "court_id")
-    private Court court;
+    private Court court; // ✅ Sửa: từ Long -> Court
 
     @ManyToOne
     @JoinColumn(name = "player_id")
-    private Player player; // Thuộc tính player
+    private Player player;
 
     private LocalDate date;
-
     private LocalTime startTime;
-
     private LocalTime endTime;
+
+    public Booking() {}
 
     // Getters và Setters
     public Long getId() {
@@ -47,7 +47,7 @@ public class Booking {
         return player;
     }
 
-    public void setPlayer(Player player) { // Đảm bảo phương thức setPlayer tồn tại
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -72,6 +72,11 @@ public class Booking {
     }
 
     public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
+        // Tự động tính endTime nếu chưa có
+        if (endTime == null && this.startTime != null) {
+            this.endTime = this.startTime.plusHours(1);
+        } else {
+            this.endTime = endTime;
+        }
     }
 }

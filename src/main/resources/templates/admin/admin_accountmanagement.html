@@ -1,7 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head th:replace="master/head::head">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Người Dùng</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
 <div class="layout-wrapper layout-content-navbar">
@@ -10,118 +32,255 @@
         <div class="layout-page">
             <div th:replace="master/navbar::navbar"></div>
             <div class="content-wrapper">
-                <!-- Content -->
-
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <th:block th:fragment="content">
-                        <!DOCTYPE html>
-                        <html lang="vi">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Danh Bạ Liên Hệ</title>
-                            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-                            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-                            <style>
-                                body {
-                                    background-color: #ffffff;
-                                    min-height: 100vh;
-                                    font-family: 'Segoe UI', sans-serif;
-                                }
-                                .contact-panel {
-                                    margin-top: 30px;
-                                }
-                                .contact-list {
-                                    background-color: #fff;
-                                    border-right: 1px solid #ddd;
-                                    border-radius: 10px 0 0 10px;
-                                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                                }
-                                .contact-details {
-                                    background-color: #fff;
-                                    border-radius: 0 10px 10px 0;
-                                    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                                }
-                                .contact-list-item {
-                                    cursor: pointer;
-                                }
-                                .contact-list-item:hover {
-                                    background-color: #f8f9fa;
-                                }
-                                .btn-group-custom button {
-                                    margin-right: 10px;
-                                }
-                                .contact-header {
-                                    border-bottom: 1px solid #ddd;
-                                    margin-bottom: 15px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                        <!-- Toolbar hành động đẹp -->
-                        <div class="d-flex justify-content-end">
-                            <div class="btn-toolbar mt-3 me-4 p-2 rounded shadow-sm bg-white" style="gap: 10px;">
-                                <button class="btn btn-secondary"><i class="fas fa-plus mr-1"></i> Thêm Liên Hệ</button>
-                            </div>
+                <div class="container">
+                    <h3 class="fw-bold text-center my-3">Quản Lý Người Dùng</h3>
+                    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                        <i class="fas fa-plus"></i> Thêm Người Dùng
+                    </button>
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Họ Tên</th>
+                                    <th>Email</th>
+                                    <th>Username</th>
+                                    <th>Vai Trò</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user, iterStat : ${users}">
+                                    <td th:text="${iterStat.index + 1}">1</td>
+                                    <td th:text="${user.fullname}">Tên người dùng</td>
+                                    <td th:text="${user.email}">email@example.com</td>
+                                    <td th:text="${user.username}">username</td>
+                                    <td th:text="${user.role}">Vai trò</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal"
+                                                th:data-user-id="${user.userID}"
+                                                th:data-fullname="${user.fullname}"
+                                                th:data-email="${user.email}"
+                                                th:data-username="${user.username}"
+                                                th:data-role="${user.role}"
+                                                onclick="setEditUser(this)">
+                                            <i class="fas fa-edit"></i> Sửa
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserModal"
+                                                th:data-user-id="${user.userID}"
+                                                th:data-fullname="${user.fullname}"
+                                                onclick="setDeleteUser(this)">
+                                            <i class="fas fa-trash"></i> Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="container-fluid contact-panel">
-                            <div class="row">
-                                <!-- Danh sách liên hệ -->
-                                <div class="col-md-4 p-0 contact-list">
-                                    <div class="p-4">
-                                        <h4 class="mb-4"><i class="fas fa-address-book mr-2"></i>Tất Cả Người Dùng</h4>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item contact-list-item">Đinh Bình<br><small>binhd1822005@gmail.com</small></li>
-                                            <li class="list-group-item contact-list-item">Phước Thịnh<br><small>Nguyenthinh2500@gmail.com</small></li>
-                                            <li class="list-group-item contact-list-item">Anh Huy<br><small>nguenanhhuy1177@ut.edu.vn</small></li>
-                                            <li class="list-group-item contact-list-item">Quang Thạnh<br><small>LQThanh020@gmail.com</small></li>
-                                            <li class="list-group-item contact-list-item">Gia Hợp<br><small>huynhghop1000@ut.edu.vn</small></li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <!-- Chi tiết liên hệ -->
-                                <div class="col-md-8 p-0 contact-details">
-                                    <div class="p-4">
-                                        <div class="d-flex align-items-center contact-header mb-4">
-                                            <!-- Ảnh avatar -->
-                                            <img src="/assets/img/elements/1.jpg" alt="Avatar" class="rounded-circle mr-3" width="80" height="80">
-                                            <div>
-                                                <h3 class="mb-1">Đinh Bình</h3>
-                                                <p class="text-muted mb-0">283 LÊ ĐỨC THỌ, PHƯỜNG 17, QUẬN GÒ VẤP, TPHCM</p>
-                                            </div>
-                                        </div>
-                                        <!-- Thông tin liên hệ -->
-                                        <div>
-                                            <p><strong><i class="fas fa-mobile-alt mr-2"></i>Mobile Phone:</strong> 0914-913-662</p>
-                                            <p><strong><i class="fas fa-envelope mr-2"></i>Email:</strong> dbinh1822005@gmail.com</p>
-                                            <p><strong><i class="fab fa-twitter mr-2"></i>Message:</strong> @dbinh_netizen</p>
-                                        </div>
-                                        <!-- Các nút thao tác -->
-                                        <div class="btn-group-custom mt-4">
-                                            <button class="btn btn-primary"><i class="fas fa-edit mr-1"></i> Cập Nhật</button>
-                                            <button class="btn btn-danger"><i class="fas fa-trash-alt mr-1"></i> Xóa</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Scripts -->
-                        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-                        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-                        </body>
-                        </html>
-
-                    </th:block>
+                    </div>
                 </div>
-                <!-- / Content -->
 
-                <footer>
+                <!-- Modal Thêm Người Dùng -->
+                <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addUserModalLabel">Thêm Người Dùng Mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addUserForm">
+                                    <div class="mb-3">
+                                        <label for="newFullname" class="form-label">Họ tên</label>
+                                        <input type="text" class="form-control" id="newFullname" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="newEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newUsername" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="newUsername" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">Mật khẩu</label>
+                                        <input type="password" class="form-control" id="newPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newRole" class="form-label">Vai trò</label>
+                                        <select class="form-select" id="newRole" required>
+                                            <option value="PLAYER">Người Chơi</option>
+                                            <option value="COACH">Huấn Luyện Viên</option>
+                                            <option value="COURT_MANAGER">Quản Lý Sân</option>
+                                            <option value="ADMIN">Quản Trị Viên</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-primary" onclick="addUser()">Thêm Người Dùng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                </footer>
+                <!-- Modal Chỉnh Sửa Người Dùng -->
+                <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editUserModalLabel">Chỉnh Sửa Người Dùng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editUserForm">
+                                    <input type="hidden" id="editUserId">
+                                    <div class="mb-3">
+                                        <label for="editFullname" class="form-label">Họ tên</label>
+                                        <input type="text" class="form-control" id="editFullname" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="editEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editUsername" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="editUsername" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editPassword" class="form-label">Mật khẩu</label>
+                                        <input type="password" class="form-control" id="editPassword">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="editRole" class="form-label">Vai trò</label>
+                                        <select class="form-select" id="editRole" required>
+                                            <option value="PLAYER">Người Chơi</option>
+                                            <option value="COACH">Huấn Luyện Viên</option>
+                                            <option value="COURT_MANAGER">Quản Lý Sân</option>
+                                            <option value="ADMIN">Quản Trị Viên</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-primary" onclick="updateUser()">Cập Nhật</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Xóa Người Dùng -->
+                <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteUserModalLabel">Xóa Người Dùng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có chắc chắn muốn xóa người dùng <strong id="deleteUserFullname"></strong> không?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary mx-2" data-bs-dismiss="modal">Đóng</button>
+                                <button type="button" class="btn btn-danger" onclick="confirmDeleteUser()">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scripts -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+                <script>
+                    let userIdToDelete;
+
+                    function setEditUser(button) {
+                        const id = button.getAttribute('data-user-id');
+                        const fullname = button.getAttribute('data-fullname');
+                        const email = button.getAttribute('data-email');
+                        const username = button.getAttribute('data-username');
+                        const role = button.getAttribute('data-role');
+
+                        document.getElementById('editUserId').value = id;
+                        document.getElementById('editFullname').value = fullname;
+                        document.getElementById('editEmail').value = email;
+                        document.getElementById('editUsername').value = username;
+                        document.getElementById('editRole').value = role;
+                    }
+
+                    function updateUser() {
+                        const user = {
+                            userID: document.getElementById('editUserId').value,
+                            fullname: document.getElementById('editFullname').value,
+                            email: document.getElementById('editEmail').value,
+                            username: document.getElementById('editUsername').value,
+                            role: document.getElementById('editRole').value
+                        };
+
+                        fetch('/api/users/update', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(user)
+                        }).then(res => {
+                            if (res.ok) {
+                                alert("Người dùng đã được cập nhật thành công!");
+                                $('#editUserModal').modal('hide');
+                                location.reload();
+                            } else {
+                                alert("Có lỗi xảy ra khi cập nhật.");
+                            }
+                        });
+                    }
+
+                    function setDeleteUser(button) {
+                        userIdToDelete = button.getAttribute('data-user-id');
+                        const fullname = button.getAttribute('data-fullname');
+                        document.getElementById('deleteUserFullname').textContent = fullname;
+                    }
+
+                    function confirmDeleteUser() {
+                        fetch(`/api/users/delete/${userIdToDelete}`, {
+                            method: 'DELETE',
+                        }).then(response => {
+                            if (response.ok) {
+                                alert('Người dùng đã được xóa thành công!');
+                                $('#deleteUserModal').modal('hide');
+                                location.reload();
+                            } else {
+                                alert('Có lỗi xảy ra khi xóa người dùng.');
+                            }
+                        }).catch(error => console.error('Error:', error));
+                    }
+
+                    function addUser() {
+                        const user = {
+                            fullname: document.getElementById('newFullname').value,
+                            email: document.getElementById('newEmail').value,
+                            username: document.getElementById('newUsername').value,
+                            password: document.getElementById('newPassword').value,
+                            role: document.getElementById('newRole').value
+                        };
+
+                        fetch('/api/users/add', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(user)
+                        }).then(response => {
+                            if (response.ok) {
+                                alert('Người dùng đã được thêm thành công!');
+                                document.getElementById('addUserForm').reset();
+                                $('#addUserModal').modal('hide');
+                                location.reload();
+                            } else {
+                                alert('Có lỗi xảy ra khi thêm người dùng.');
+                            }
+                        }).catch(error => console.error('Error:', error));
+                    }
+                </script>
             </div>
         </div>
     </div>

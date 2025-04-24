@@ -99,7 +99,7 @@
 
             <!-- ✅ Đã đăng nhập -->
             <li th:if="${#authorization.expression('isAuthenticated()')}" class="nav-item mx-6">
-                <a class="nav-link position-relative" th:href="@{/player/giohang}">
+                <a class="nav-link position-relative" th:href="@{/cart}">
                     <i class="bx bx-cart bx-sm"></i>
                     <span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle"
                           th:text="${soLuongTrongGio != null ? soLuongTrongGio : 0}">

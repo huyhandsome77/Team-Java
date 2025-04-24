@@ -1,12 +1,13 @@
 package uth.edu.jpa.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import uth.edu.jpa.models.Booking;
-import uth.edu.jpa.models.Court;
 import uth.edu.jpa.models.Player;
+import uth.edu.jpa.repositories.CourtRepository;
 import uth.edu.jpa.repositories.TournamentRepository;
 import uth.edu.jpa.services.*;
 import uth.edu.jpa.repositories.PlayerRepository;
@@ -14,20 +15,31 @@ import uth.edu.jpa.models.Tournament;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import uth.edu.jpa.models.*;
 import java.util.List;
-
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping("/coach")
-public class CoachController {
 
-    @Autowired
-    private BookingService bookingService;
+
+public class CoachController {
+    private static final Logger logger = LoggerFactory.getLogger(CoachController.class);
 
     @Autowired
     private PlayerRepository playerRepository;
 
     @Autowired
+    private CourtRepository courtRepository;
+
+    @Autowired
     private TournamentService tournamentService;
+
+    @Autowired
+    private CourtService courtService;
+
+    @Autowired
+    private BookingService bookingService;
 
     @Autowired
     private PlayerService playerService;
@@ -40,16 +52,53 @@ public class CoachController {
         return "coach/Coach_Dashboard";
     }
 
-    @GetMapping("/datsan")
-    public String datSan(Model model) {
-        model.addAttribute("coachName", "Huấn Luyện Viên");
-        model.addAttribute("booking", new Booking());
-        List<Court> courts = bookingService.getAllCourts();
-        model.addAttribute("courts", courts);
-        List<Booking> bookings = bookingService.getAllBookings();
-        model.addAttribute("bookings", bookings);
-        return "coach/Coach_DatSan";
+    @ModelAttribute("courts")
+    public List<Court> getAllCourts() {
+        return courtService.getAllCourts();
     }
+
+    @GetMapping("/datsan")
+    public String showBookingForm(Model model) {
+        // Thêm đối tượng booking vào model để form có thể binding với đối tượng này
+        model.addAttribute("booking", new Booking());
+
+        // Lấy danh sách các bookings đã có
+        model.addAttribute("bookings", bookingService.getAllBookings());
+
+        // Lấy danh sách các sân từ courtService
+        List<Court> courts = courtService.getAllCourts();  // Sửa lại phương thức ở đây
+        model.addAttribute("courts", courts);
+
+        return "coach/Coach_DatSan";  // Trả về view tương ứng
+    }
+
+    @PostMapping("/datsan")
+    public String createBooking(@ModelAttribute("booking") Booking booking,
+                                @RequestParam("court") Long courtId, // lấy id từ form
+                                RedirectAttributes redirectAttributes) {
+
+        Court court = courtRepository.findById(courtId).orElse(null);
+        if (court == null) {
+            redirectAttributes.addFlashAttribute("message", "Không tìm thấy sân!");
+            return "redirect:/coach/datsan";
+        }
+
+        booking.setCourt(court); // set lại sân vào booking
+        bookingService.saveBooking(booking);
+        redirectAttributes.addFlashAttribute("message", "Đặt sân thành công!");
+        return "redirect:/coach/datsan";
+    }
+
+
+
+    @PostMapping("/deleteBooking/{id}")
+    public String deleteBooking(@PathVariable("id") Long id,
+                                RedirectAttributes redirectAttributes) {
+        bookingService.deleteBookingById(id);
+        redirectAttributes.addFlashAttribute("message", "Xóa đặt sân thành công!");
+        return "redirect:/coach/datsan";
+    }
+
 
     @GetMapping("/players")
     public String players(Model model) {
@@ -70,16 +119,40 @@ public class CoachController {
         return "coach/Coach_Players";
     }
 
-    // Thêm vào CoachController.java
+    // Trang chỉnh sửa người chơi
     @GetMapping("/players/edit/{id}")
-    public String editPlayer(@PathVariable("id") Long id, Model model) {
-        Player player = playerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Player không tồn tại"));
-        model.addAttribute("player", player);
-        return "coach/Coach_EditPlayer"; // Tạo template mới để chỉnh sửa
+    public String editPlayerForm(@PathVariable Long id, Model model) {
+        Optional<Player> playerOptional = playerService.findById(id);
+        if (playerOptional.isPresent()) {
+            model.addAttribute("player", playerOptional.get());
+            return "coach/Coach_Players"; // Quay lại trang người chơi với form chỉnh sửa
+        } else {
+            model.addAttribute("message", "Không tìm thấy người chơi.");
+            return "redirect:/coach/players"; // Quay lại danh sách người chơi
+        }
     }
 
+    @PostMapping("/players/update/{id}")
+    public String updatePlayer(@PathVariable Long id,
+                               @RequestParam String name,
+                               @RequestParam String email,
+                               @RequestParam(required = false) String phone,
+                               RedirectAttributes redirectAttributes) {
+        Player player = playerRepository.findById(id).orElse(null);
+        if (player != null) {
+            player.setName(name);
+            player.setEmail(email);
+            player.setPhone(phone);
+            playerRepository.save(player);
+            redirectAttributes.addFlashAttribute("message", "Cập nhật thành công.");
+        }
+        return "redirect:/coach/players";
+    }
+
+
+
     @PostMapping("/players/delete/{id}")
+    @Transactional
     public String deletePlayer(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         try {
             playerRepository.deleteById(id);
@@ -90,43 +163,30 @@ public class CoachController {
         return "redirect:/coach/players";
     }
 
-    @PostMapping("/players/edit/{id}")
-    public String updatePlayer(@PathVariable("id") Long id, @ModelAttribute("player") Player player, RedirectAttributes redirectAttributes) {
-        try {
-            Player existingPlayer = playerRepository.findById(id).orElse(null);
-            if (existingPlayer == null) {
-                redirectAttributes.addFlashAttribute("message", "Không tìm thấy người chơi với ID: " + id);
-                return "redirect:/coach/players";
-            }
 
-            if (player.getName() == null || player.getName().trim().isEmpty()) {
-                redirectAttributes.addFlashAttribute("message", "Tên người chơi không được để trống!");
-                return "redirect:/coach/players/edit/" + id;
-            }
 
-            existingPlayer.setName(player.getName());
-            playerRepository.save(existingPlayer);
-            redirectAttributes.addFlashAttribute("message", "Cập nhật người chơi thành công!");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Lỗi khi cập nhật người chơi: " + e.getMessage());
-        }
-        return "redirect:/coach/players";
-    }
+
 
     @GetMapping("/tournament")
+    @Transactional
     public String tournaments(Model model) {
-        List<Tournament> tournaments = tournamentService.getUpcomingTournaments();
-        List<Court> courts = bookingService.getAllCourts();  // Lấy danh sách sân
-        List<Player> players = playerRepository.findAll();   // Lấy danh sách người chơi
+        logger.info("Starting /coach/tournament");
+        playerService.syncUsersToPlayers();
+        logger.info("Finished syncing users to players");
 
-        model.addAttribute("coachName", "Huấn Luyện Viên");
+        List<Tournament> tournaments = tournamentService.getUpcomingTournaments();
+        List<Player> players = playerRepository.findAll();
+        logger.info("Found {} players: {}", players.size(), players);
+
         model.addAttribute("tournaments", tournaments);
-        model.addAttribute("courts", courts);
         model.addAttribute("players", players);
 
-        model.addAttribute("players", playerRepository.findAll());
-        model.addAttribute("tournament", new Tournament());  // Đảm bảo thêm đối tượng tournament vào Model
+        if (players.isEmpty()) {
+            logger.warn("No players found in the system");
+            model.addAttribute("message", "Không có người chơi nào trong hệ thống.");
+        }
 
+        model.addAttribute("tournament", new Tournament());
         return "coach/Coach_Tournament";
     }
 
@@ -135,30 +195,45 @@ public class CoachController {
                                    @RequestParam(value = "courtIds", required = false) List<Long> courtIds,
                                    @RequestParam(value = "playerIds", required = false) List<Long> playerIds,
                                    RedirectAttributes redirectAttributes) {
+        logger.info("Creating tournament with courtIds: {}, playerIds: {}", courtIds, playerIds);
         try {
             if (courtIds == null || courtIds.isEmpty()) {
                 redirectAttributes.addFlashAttribute("message", "Bạn phải chọn ít nhất một sân!");
                 return "redirect:/coach/tournament";
             }
-
-            Player player = playerRepository.findById(1L)
-                    .orElseThrow(() -> new RuntimeException("Player không tồn tại"));
+            if (playerIds == null || playerIds.isEmpty()) {
+                redirectAttributes.addFlashAttribute("message", "Bạn phải chọn ít nhất một người chơi!");
+                return "redirect:/coach/tournament";
+            }
 
             tournamentService.createTournament(tournament, courtIds, playerIds);
             redirectAttributes.addFlashAttribute("message", "Giải đấu đã được tạo thành công!");
         } catch (Exception e) {
+            logger.error("Error creating tournament: {}", e.getMessage(), e);
             redirectAttributes.addFlashAttribute("message", "Lỗi khi tạo giải đấu: " + e.getMessage());
         }
-
         return "redirect:/coach/tournament";
     }
 
-    @GetMapping("/tournament/delete/{id}")
-    public String deleteTournament(@PathVariable("id") Long id, Model model) {
-        tournamentService.deleteTournament(id);
-        model.addAttribute("message", "Giải đấu đã được xóa!");
+    @GetMapping("/tournament/delete")
+    public String deleteTournament(@RequestParam("id") Long id, RedirectAttributes redirectAttributes) {
+        logger.info("Deleting tournament with id: {}", id);
+        try {
+            tournamentService.deleteTournament(id);
+            redirectAttributes.addFlashAttribute("message", "Xóa giải đấu thành công!");
+        } catch (Exception e) {
+            logger.error("Error deleting tournament: {}", e.getMessage(), e);
+            redirectAttributes.addFlashAttribute("message", "Lỗi khi xóa giải đấu: " + e.getMessage());
+        }
         return "redirect:/coach/tournament";
     }
+
+
+
+
+
+
+
 
     @GetMapping("/chat")
     public String chats(Model model) {

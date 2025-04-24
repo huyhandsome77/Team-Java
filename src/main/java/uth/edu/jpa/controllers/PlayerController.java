@@ -1,13 +1,19 @@
 package uth.edu.jpa.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import uth.edu.jpa.config.SecurityUtils;
 import uth.edu.jpa.models.SanPham;
+import uth.edu.jpa.models.User;
 import uth.edu.jpa.repositories.SanPhamRepository;
+import uth.edu.jpa.repositories.UserRepository;
+import uth.edu.jpa.services.CartService;
 
 import java.util.List;
 
@@ -18,9 +24,15 @@ public class PlayerController {
     @Autowired
     private SanPhamRepository sanPhamRepository;
 
+    @Autowired
+    private CartService cartService;
+
     @GetMapping("/home")
-    public String PlayerDashboardPage(HttpServletRequest request) {
-        return "player/Player_Dashboard" ; // gọi đến html page
+    public String PlayerDashboardPage(Model model, HttpSession session) {
+        User user = SecurityUtils.getCurrentUser();
+        int quantity = cartService.getTotalQuantity(user);
+        model.addAttribute("soLuongTrongGio", quantity);
+        return "player/Player_Dashboard";
     }
     @GetMapping("/datsan")
     public String PlayerDatSanPage() {
@@ -44,9 +56,14 @@ public class PlayerController {
         model.addAttribute("dsSanPham", dsSanPham);
         return "player/Player_MuaSanPham"; // gọi đến html page
     }
-    @GetMapping("/giohang")
-    public String PlayerGioHangPage() {
-        return "player/Player_GioHang"; // gọi đến html page
+
+    @ModelAttribute("soLuongTrongGio")
+    public int getSoLuongTrongGio() {
+        User user = SecurityUtils.getCurrentUser();
+        if (user != null) {
+            return cartService.getTotalQuantity(user);  // Hàm này bạn phải implement trong CartService
+        }
+        return 0;
     }
 }
 
