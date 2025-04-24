@@ -98,6 +98,76 @@
                                        th:attr="data-bs-toggle='modal', data-bs-target='#ratingModal__' + ${san.courtId}">
                                         Đánh Giá
                                     </a>
+
+                                    <!-- Modal Đặt Sân -->
+                                    <div class="modal fade" th:id="'datsanmodal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form th:action="@{'/datsan/' + ${san.courtId}}" method="post">
+                                                    <div class="modal-header justify-content-center">
+                                                        <h5 class="modal-title text-center ">Đặt <span th:text="${san.courtName}"></span></h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input type="hidden" name="courtId" th:value="${san.courtId}"/>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Họ và tên</label>
+                                                            <input type="text" name="fullName" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Số điện thoại</label>
+                                                            <input type="text" name="phoneNumber" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Ngày đặt</label>
+                                                            <input type="date" name="bookingDate" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Giờ bắt đầu</label>
+                                                            <input type="time" name="startTime" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Giờ kết thúc</label>
+                                                            <input type="time" name="endTime" class="form-control" required>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Ghi chú</label>
+                                                            <textarea name="note" class="form-control" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer d-flex justify-content-end gap-2 ">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                        <button type="submit" class="btn btn-primary">Đặt Sân</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal thông báo đặt sân thành công -->
+                                    <div class="modal fade" id="successBookingModal" tabindex="-1" aria-labelledby="successBookingLabel" aria-hidden="true"
+                                         th:if="${successMessage}">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-body" style="padding: 40px; position: relative; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                                                    <div class="rounded-circle bg-success text-white d-flex justify-content-center align-items-center "
+                                                         style="width: 80px; height: 80px; margin: 0 auto; font-size: 40px; animation: scaleUp 0.5s ease-in-out;">
+                                                        <i class="fas fa-check"></i>
+                                                    </div>
+                                                    <h4 class="text-center mt-8" th:text="${successMessage}">Bạn đã đặt sân thành công!</h4>
+                                                </div>
+                                                <div class="modal-footer justify-content-center">
+                                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- Modal đánh giá -->
                                     <div class="modal fade" th:id="'ratingModal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -211,6 +281,17 @@
                             checkRating();
                         });
                     </script>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            // Kiểm tra nếu modal tồn tại thì hiển thị
+                            const modal = document.getElementById('successBookingModal');
+                            if (modal) {
+                                const bootstrapModal = new bootstrap.Modal(modal);
+                                bootstrapModal.show();
+                            }
+                        });
+                    </script>
+
                     <!-- / Content -->
                 </div>
                 <div th:replace="master/master_player/footer::footer"></div>
