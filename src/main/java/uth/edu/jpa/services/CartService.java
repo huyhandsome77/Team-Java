@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static java.lang.Long.sum;
 
 @Service
 public class CartService {
@@ -23,6 +22,10 @@ public class CartService {
 
     @Autowired
     private SanPhamRepository sanPhamRepo;
+
+    public Cart getCartByUser(User user) {
+        return cartRepo.findByUser(user).orElse(null);
+    }
 
     public int getTotalQuantity(User user) {
         Optional<Cart> optionalCart = cartRepo.findByUser(user);

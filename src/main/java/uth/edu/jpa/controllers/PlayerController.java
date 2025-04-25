@@ -42,10 +42,7 @@ public class PlayerController {
     public String PlayerLienHePage() {
         return "player/Player_LienHe"; // gọi đến html page
     }
-//    @GetMapping("/muasanpham")
-//    public String PlayerMuaSPPage() {
-//        return "player/Player_MuaSanPham"; // gọi đến html page
-//    }
+
     @GetMapping("/nhacnho")
     public String PlayerNhacNho() {
         return "player/Player_NhacNho"; // gọi đến html page

@@ -13,14 +13,11 @@ import uth.edu.jpa.config.*;
 import uth.edu.jpa.models.*;
 import uth.edu.jpa.repositories.DeliveryAddressRepository;
 
+import uth.edu.jpa.repositories.SanPhamRepository;
 import uth.edu.jpa.services.CartService;
 import uth.edu.jpa.services.OrderService;
 import uth.edu.jpa.services.VnPayService;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @Controller
 public class PaymentController {
@@ -35,6 +32,10 @@ public class PaymentController {
 
     @Autowired
     private OrderService orderService;
+
+
+    @Autowired
+    private SanPhamRepository sanPhamRepository;
 
     @GetMapping("/payment/payment-result")
     public String resultPage() {
@@ -81,8 +82,25 @@ public class PaymentController {
                 order.setTotalAmount(Math.round(total));
                 order.setDeliveryAddress(delivery);
                 order.setBankCode(vnp_TxnRef);
-                order.setStatus(Order.OrderStatus.PENDING);
+                order.setStatus(Order.OrderStatus. PENDING);
                 orderService.saveOrder(order);
+
+
+                // Lấy giỏ hàng hiện tại và giảm số lượng sp khi tt thành công
+                Cart userCart = cartService.getCartByUser(user);
+                if (userCart != null && userCart.getItems() != null) {
+                    for (CartItemEntity cartItem : userCart.getItems()) {
+                        SanPham sanPham = cartItem.getSanPham();
+                        int soLuong = cartItem.getSoLuong();
+
+                        // Trừ tồn kho
+                        int tonKhoMoi = sanPham.getTonKho() - soLuong;
+                        if (tonKhoMoi < 0) tonKhoMoi = 0;
+                        sanPham.setTonKho(tonKhoMoi);
+                        sanPhamRepository.save(sanPham); // cập nhật lại vào DB
+                    }
+                }
+
 
                 // Xóa giỏ hàng và session
                 cartService.clearCart(user);

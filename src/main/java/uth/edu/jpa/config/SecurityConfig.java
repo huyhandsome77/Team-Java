@@ -25,9 +25,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/home",        // ✅ Trang public
+                                "/home",
                                 "/register",
-                                "/css/**",      // Cho phép load static resource
+                                "/css/**",
                                 "/js/**",
                                 "/images/**",
                                 "/webjars/**"
