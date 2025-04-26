@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{master/head :: head}"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <div th:replace="~{master/master_coach/menu :: menu}"></div>
+
+    <div class="layout-page">
+      <div th:replace="~{master/navbar :: navbar}"></div>
+
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <div class="container py-5">
+            <h1 class="text-center text-black fw-bold mb-4">QUẢN LÝ HỌC VIÊN NỔI BẬT</h1>
+
+            <!-- Thông báo -->
+            <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+              <span th:text="${message}"></span>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Form đánh giá tiến độ học viên -->
+            <div class="card shadow-lg p-4 mb-4">
+              <h2 class="text-center text-black mb-3">Đánh Giá Học Viên</h2>
+              <form th:action="@{/coach/highlighted/add}" th:object="${highlightedStudent}" method="post">
+                <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <!-- Chọn học viên -->
+                <div class="mb-3">
+                  <label for="player" class="form-label">Tên Học Viên:</label>
+                  <select id="player" th:field="*{player}" class="form-select" required>
+                    <option value="">-- Chọn học viên --</option>
+                    <option th:each="player : ${players}"
+                            th:value="${player.id}"
+                            th:text="${player.name}"></option>
+                  </select>
+                  <div class="text-danger" th:if="${#fields.hasErrors('player')}" th:errors="*{player}"></div>
+                </div>
+
+                <!-- Phần trăm tiến độ -->
+                <div class="mb-3">
+                  <label for="progress" class="form-label">Tiến Độ (%):</label>
+                  <input type="number" id="progress" th:field="*{progress}" class="form-control" min="0" max="100" required>
+                  <div class="text-danger" th:if="${#fields.hasErrors('progress')}" th:errors="*{progress}"></div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Đánh Giá</button>
+              </form>
+
+            </div>
+
+            <!-- Danh sách học viên nổi bật -->
+            <div class="card shadow-lg p-4">
+              <h2 class="text-center text-black mb-3">Danh Sách Học Viên Nổi Bật</h2>
+              <table class="table table-striped text-center">
+                <thead class="table-primary">
+                <tr>
+                  <th>ID</th>
+                  <th>Tên Học Viên</th>
+                  <th>Tiến Độ</th>
+                  <th>Hành Động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="highlighted : ${highlightedStudents}">
+                  <td th:text="${highlighted.id}"></td>
+                  <td th:text="${highlighted.player.name}"></td>
+                  <td th:text="${highlighted.progress + '%'}"></td>
+                  <td>
+                    <form th:action="@{/coach/highlighted/delete/{id}(id=${highlighted.id})}" method="post" style="display:inline;">
+                      <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                    </form>
+                  </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(highlightedStudents)}">
+                  <td colspan="4">Chưa có học viên nào được đánh giá.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

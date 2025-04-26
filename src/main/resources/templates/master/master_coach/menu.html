@@ -60,6 +60,13 @@
         </li>
 
         <li class="menu-item">
+            <a href="/coach/highlighted" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-trophy"></i>
+                <div class="text-truncate" data-i18n="Giải Đấu">Quản lý Học viên</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
             <a href="/coach/chat" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-chat"></i>
                 <div class="text-truncate" data-i18n="Chat với người chơi">Chat với người chơi</div>
@@ -72,22 +79,22 @@
                     🌟 Học viên nổi bật
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        🥇 Nguyễn Phước Thịnh
-                        <span class="badge bg-success rounded-pill">98%</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        🥈 Nguyễn Anh Huy
-                        <span class="badge bg-primary rounded-pill">95%</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        🥉 Lê Quang Thạnh
-                        <span class="badge bg-warning rounded-pill">93%</span>
-                    </li>
+                    <th:block th:each="student, iterStat : ${topHighlightedStudents}">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span th:switch="${iterStat.index}">
+                        <span th:case="0">🥇</span>
+                        <span th:case="1">🥈</span>
+                        <span th:case="2">🥉</span>
+                    </span>
+                            <span th:text="${student.player.name}" class="ms-1"></span>
+                            <span th:classappend="${iterStat.index == 0} ? 'bg-success' : (${iterStat.index == 1} ? 'bg-primary' : 'bg-warning')"
+                                  class="badge rounded-pill ms-auto"
+                                  th:text="${student.progress + '%'}"></span>
+                        </li>
+                    </th:block>
                 </ul>
             </div>
         </div>
-
         <!-- Widget Lịch hôm nay -->
         <div class="mt-4 px-3">
             <div class="card shadow-sm border-0 p-3">

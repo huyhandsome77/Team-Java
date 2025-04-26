@@ -45,10 +45,15 @@ public class CoachController {
     private PlayerService playerService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private HighlightedStudentService highlightedStudentService;
+
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         model.addAttribute("coachName", "Huấn Luyện Viên");
+        model.addAttribute("topHighlightedStudents", highlightedStudentService.getTopHighlightedStudents());
+
         return "coach/Coach_Dashboard";
     }
 
@@ -102,6 +107,7 @@ public class CoachController {
 
     @GetMapping("/players")
     public String players(Model model) {
+        model.addAttribute("topHighlightedStudents", highlightedStudentService.getTopHighlightedStudents());
         try {
             // Đồng bộ dữ liệu từ users sang players
             playerService.syncUsersToPlayers();
@@ -180,6 +186,7 @@ public class CoachController {
 
         model.addAttribute("tournaments", tournaments);
         model.addAttribute("players", players);
+        model.addAttribute("topHighlightedStudents", highlightedStudentService.getTopHighlightedStudents());
 
         if (players.isEmpty()) {
             logger.warn("No players found in the system");
@@ -230,6 +237,44 @@ public class CoachController {
 
 
 
+
+    @GetMapping("/highlighted")
+    public String highlightedStudents(Model model) {
+        List<HighlightedStudent> highlightedStudents = highlightedStudentService.findAll();
+        List<Player> players = playerService.getAllPlayers(); // lấy danh sách tất cả Player
+        List<HighlightedStudent> allStudents = highlightedStudentService.findAll();
+
+        // Sắp xếp giảm dần theo progress
+        allStudents.sort((a, b) -> Integer.compare(b.getProgress(), a.getProgress()));
+
+        // Nếu bạn muốn lấy ví dụ Top 3 người, thì:
+        List<HighlightedStudent> topStudents = allStudents.stream().limit(3).toList();
+
+        model.addAttribute("highlightedStudents", allStudents);
+        model.addAttribute("topHighlightedStudents", topStudents);
+
+        model.addAttribute("highlightedStudents", highlightedStudents);
+        model.addAttribute("players", players);
+        model.addAttribute("highlightedStudent", new HighlightedStudent()); // object cho form tạo mới
+
+        return "coach/Coach_HighlightedStudents"; // Trang giao diện bạn đã chuẩn bị
+    }
+
+    @PostMapping("/highlighted/add")
+    public String addHighlightedStudent(@ModelAttribute("highlightedStudent") HighlightedStudent highlightedStudent,
+                                        RedirectAttributes redirectAttributes) {
+        highlightedStudentService.save(highlightedStudent);
+        redirectAttributes.addFlashAttribute("message", "Đánh giá học viên thành công!");
+        return "redirect:/coach/highlighted";
+    }
+
+    @PostMapping("/highlighted/delete/{id}")
+    public String deleteHighlightedStudent(@PathVariable Integer id,
+                                           RedirectAttributes redirectAttributes) {
+        highlightedStudentService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Xóa học viên nổi bật thành công!");
+        return "redirect:/coach/highlighted";
+    }
 
 
 
