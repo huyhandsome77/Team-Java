@@ -83,6 +83,9 @@ public class QLSModel {
         this.status = status;
         this.rentalPrice = rentalPrice;
     }
+    public String getName() {
+        return courtName;
+    }
 
     // Getters and Setters
     public String getImage() {

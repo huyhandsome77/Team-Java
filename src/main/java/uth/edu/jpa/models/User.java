@@ -7,6 +7,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.Collection;
 import java.util.List;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -41,6 +43,7 @@ public class User {
         this.fullname = fullname;
         this.role = role;
     }
+
 
     // Getter and Setter
     public int getUserID() {

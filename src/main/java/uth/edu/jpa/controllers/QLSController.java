@@ -1,25 +1,41 @@
 package uth.edu.jpa.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import uth.edu.jpa.models.BookingModel;
 import uth.edu.jpa.models.QLSModel;
-
+import org.springframework.security.core.Authentication;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import uth.edu.jpa.models.User;
+
+import uth.edu.jpa.repositories.BookingRepository;
 import uth.edu.jpa.repositories.QLSRepository;
+import uth.edu.jpa.repositories.UserRepository;
+import uth.edu.jpa.services.BookingService;
 
 @Controller
 
 public class QLSController {
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private QLSRepository qlsRepository;
+   @Autowired
+   private BookingRepository bookingRepository;
+
     @ModelAttribute("court")
     public QLSModel getCourtModel() {
         return new QLSModel();
@@ -49,7 +65,22 @@ public class QLSController {
     }
 
     @GetMapping("/History")
-    public String HistoryPage() { return "QuanLySan/History"; }
+    public String HistoryPage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = authentication.getName();
+        User user = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        List<BookingModel> historyBookings = bookingRepository.findByUserId(user.getUserID());
+        Set<QLSModel> uniqueCourtsSet = historyBookings.stream()
+                .map(BookingModel::getCourt)
+                .collect(Collectors.toSet());
+        List<QLSModel> uniqueCourts = new ArrayList<>(uniqueCourtsSet);
+        uniqueCourts.sort((court1, court2) -> Long.compare(court1.getCourtId(), court2.getCourtId()));
+        model.addAttribute("historyBookings", historyBookings);
+        model.addAttribute("uniqueCourts", uniqueCourts);
+        return "QuanLySan/History";
+    }
+
     @GetMapping("Support")
     public String SupportPage() { return "QuanLySan/Support"; }
 
@@ -102,15 +133,19 @@ public class QLSController {
 
     // Xử lý cập nhật status
     @PostMapping("/edit/{id}")
-    public String updateCourtStatus(@PathVariable Long id, @RequestParam("status") String status) {
+    public String updateCourtStatus(@PathVariable Long id,
+                                    @RequestParam("status") String status,
+                                    @RequestParam("price") double price) {
         Optional<QLSModel> optionalCourt = qlsRepository.findById(id);
         if (optionalCourt.isPresent()) {
             QLSModel court = optionalCourt.get();
             court.setStatus(status);
+            court.setRentalPrice(price);  // Chỉnh sửa giá thuê sân
             qlsRepository.save(court);
         }
         return "redirect:/QuanLySan";
     }
+
 
 
     // Xử lý xóa sân

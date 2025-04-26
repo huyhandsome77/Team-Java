@@ -35,11 +35,16 @@ public class BookingService {
         return bookingRepository.findAll();
     }
     public long getTotalBookings() {
-        return bookingRepository.count(); // Đếm số lượt đặt sân
+        return bookingRepository.count();
     }
 
     public void deleteBookingById(Long id) {
         bookingRepository.deleteById(id);
     }
+    public void saveBooking(BookingModel bookingModel) {
+        bookingRepository.save(bookingModel);
+    }
+
 }
+
 
