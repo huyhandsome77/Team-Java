@@ -30,15 +30,26 @@ public class BookingModel {
     @Column(name = "note")
     private String note;
 
+    @Column(name = "total_price")
+    private Double totalPrice;
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "court_id", nullable = false)  // JoinColumn to specify the foreign key column
-    private QLSModel court;  // Thay thế courtId bằng court (QLSModel)
+    @JoinColumn(name = "court_id", nullable = false)
+    private QLSModel court;
 
     // Constructors
     public BookingModel() {}
 
     public BookingModel(Long id, String fullName, String phoneNumber, LocalDate bookingDate,
-                        LocalTime startTime, LocalTime endTime, String note, QLSModel court) {  // Sử dụng QLSModel thay vì courtId
+                        LocalTime startTime, LocalTime endTime, String note, QLSModel court) {
         this.id = id;
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
@@ -46,10 +57,19 @@ public class BookingModel {
         this.startTime = startTime;
         this.endTime = endTime;
         this.note = note;
-        this.court = court;  // Sử dụng đối tượng court thay vì courtId
+        this.court = court;
+    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user; // Thêm user
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -106,11 +126,11 @@ public class BookingModel {
         this.note = note;
     }
 
-    public QLSModel getCourt() {  // Sử dụng getter cho court
+    public QLSModel getCourt() {
         return court;
     }
 
-    public void setCourt(QLSModel court) {  // Sử dụng setter cho court
+    public void setCourt(QLSModel court) {
         this.court = court;
     }
 
@@ -124,7 +144,7 @@ public class BookingModel {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", note='" + note + '\'' +
-                ", court=" + court +  // In ra đối tượng court
+                ", court=" + court +
                 '}';
     }
 }

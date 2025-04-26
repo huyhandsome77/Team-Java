@@ -16,14 +16,12 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
-    // Sửa phương thức kiemTraTrungGio để sử dụng đối tượng court thay vì courtId
     public boolean kiemTraTrungGio(QLSModel court, LocalDate date, LocalTime start, LocalTime end) {
         List<BookingModel> danhSach = bookingRepository.findByCourtAndBookingDate(court, date);
 
         for (BookingModel booking : danhSach) {
-            // Kiểm tra nếu thời gian đặt sân có giao nhau
-            if (booking.getStartTime().isBefore(end) && start.isBefore(booking.getEndTime())) {
-                return true; // có giao nhau
+            if (start.isBefore(booking.getEndTime()) && end.isAfter(booking.getStartTime())) {
+                return true;
             }
         }
         return false;
@@ -36,4 +34,12 @@ public class BookingService {
     public List<BookingModel> getAllBookings() {
         return bookingRepository.findAll();
     }
+    public long getTotalBookings() {
+        return bookingRepository.count(); // Đếm số lượt đặt sân
+    }
+
+    public void deleteBookingById(Long id) {
+        bookingRepository.deleteById(id);
+    }
 }
+

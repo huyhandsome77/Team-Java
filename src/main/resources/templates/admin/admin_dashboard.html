@@ -90,12 +90,13 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="card card-highlight mb-4">
-                                        <div class="card-body">
-                                            <div class="metric">26</div>
+                                        <div class="card-body text-center">
+                                            <div class="metric" th:text="${soSanDaDat}">0</div>
                                             <div>Sân đã đặt</div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-3">
                                     <div class="card card-highlight mb-4">
                                         <div class="card-body">
@@ -136,6 +137,6 @@
         </div>
     </div>
 </div>
-<script th:replace="master/hoaroi::hoaroi"></script>
+
 </body>
 </html>

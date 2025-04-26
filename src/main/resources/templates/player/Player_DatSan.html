@@ -47,6 +47,19 @@
         .star-rating label:hover ~ label {
             color: gold;
         }
+        /* CSS để điều chỉnh độ mờ dần và ẩn đi thông báo */
+        #errorNotification {
+            display: none; /* Ban đầu không hiển thị */
+            opacity: 0;
+            transition: opacity 1s ease-out; /* Hiệu ứng mờ dần */
+        }
+
+        /* Khi thông báo hiển thị */
+        #errorNotification.show {
+            display: block;
+            opacity: 1;
+        }
+
     </style>
 </head>
 <body>
@@ -59,6 +72,12 @@
                 <!-- Content -->
 
                 <div class="container-xxl flex-grow-1 container-y">
+                    <div>
+                    <div  th:if="${error}" class="alert alert-danger alert-dismissible d-flex align-items-center fade show mt-4" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <p class="bi-exclamation-octagon-fill" th:text="${error}"></p>
+                    </div>
+                    </div>
                     <div class="container mt-2">
                         <div class="row row-cols-1 row-cols-md-3 g-4">
                         <div class="col" th:each="san : ${dsSan}">
@@ -99,17 +118,18 @@
                                         Đánh Giá
                                     </a>
 
+
                                     <!-- Modal Đặt Sân -->
                                     <div class="modal fade" th:id="'datsanmodal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <form th:action="@{'/datsan/' + ${san.courtId}}" method="post">
                                                     <div class="modal-header justify-content-center">
-                                                        <h5 class="modal-title text-center ">Đặt <span th:text="${san.courtName}"></span></h5>
+                                                        <h5 class="modal-title text-center">Đặt <span th:text="${san.courtName}"></span></h5>
                                                     </div>
                                                     <div class="modal-body">
                                                         <input type="hidden" name="courtId" th:value="${san.courtId}"/>
-
+                                                        <input type="hidden" th:id="'rentalPrice_' + ${san.courtId}" th:value="${san.rentalPrice}" />
                                                         <div class="mb-3">
                                                             <label class="form-label">Họ và tên</label>
                                                             <input type="text" name="fullName" class="form-control" required>
@@ -127,21 +147,32 @@
 
                                                         <div class="mb-3">
                                                             <label class="form-label">Giờ bắt đầu</label>
-                                                            <input type="time" name="startTime" class="form-control" required>
+                                                            <input type="time" name="startTime" class="form-control"
+                                                                   th:attr="onchange=|calculateTotalPrice(${san.courtId})|" required>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label class="form-label">Giờ kết thúc</label>
-                                                            <input type="time" name="endTime" class="form-control" required>
+                                                            <input type="time" name="endTime" class="form-control"
+                                                                   th:attr="onchange=|calculateTotalPrice(${san.courtId})|" required>
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Giá thuê sân (VND/giờ)</label>
+                                                            <p id="formattedPrice_${san.courtId}" th:text="${san.rentalPrice}">100</p>
 
+                                                            <label class="form-label">Tổng tiền</label>
+                                                            <p th:id="'totalPrice_' + ${san.courtId}" th:text="'0 VND'"></p>
+                                                        </div>
                                                         <div class="mb-3">
                                                             <label class="form-label">Ghi chú</label>
                                                             <textarea name="note" class="form-control" rows="2"></textarea>
                                                         </div>
+
+
+                                                        <input type="hidden" name="totalPrice" th:id="'hiddenTotalPrice_' + ${san.courtId}" />
                                                     </div>
 
-                                                    <div class="modal-footer d-flex justify-content-end gap-2 ">
+                                                    <div class="modal-footer d-flex justify-content-end gap-2">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                                                         <button type="submit" class="btn btn-primary">Đặt Sân</button>
                                                     </div>
@@ -149,6 +180,48 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <script>
+                                        function calculateTotalPrice(courtId) {
+                                            var startTime = document.querySelector(`#datsanmodal__${courtId} input[name="startTime"]`).value;
+                                            var endTime = document.querySelector(`#datsanmodal__${courtId} input[name="endTime"]`).value;
+
+                                            if (startTime && endTime) {
+                                                var start = new Date("1970-01-01T" + startTime + "Z");
+                                                var end = new Date("1970-01-01T" + endTime + "Z");
+                                                var durationInMinutes = (end - start) / 60000;
+
+                                                var rentalPricePerHour = parseFloat(document.getElementById("rentalPrice_" + courtId).value);
+                                                var totalPrice = (durationInMinutes / 60) * rentalPricePerHour;
+
+                                                document.getElementById("totalPrice_" + courtId).textContent = formatMoneyVND(totalPrice);
+                                                document.getElementById("hiddenTotalPrice_" + courtId).value = totalPrice.toFixed(0);
+                                            }
+                                        }
+
+                                        function formatMoneyVND(number) {
+                                            return number.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " VND";
+                                        }
+                                        window.onload = function() {
+
+                                            const prices = document.querySelectorAll("[id^='formattedPrice_']");
+                                            prices.forEach(function(priceElement) {
+                                                const priceText = priceElement.innerText;
+
+
+                                                const price = parseFloat(priceText);
+
+                                                if (!isNaN(price)) {
+
+                                                    const formattedPrice = new Intl.NumberFormat('vi-VN').format(price);
+                                                    priceElement.innerText = formattedPrice + " VND";
+                                                } else {
+                                                    console.log("Price is not a valid number");
+                                                }
+                                            });
+                                        };
+
+                                    </script>
+
                                     <!-- Modal thông báo đặt sân thành công -->
                                     <div class="modal fade" id="successBookingModal" tabindex="-1" aria-labelledby="successBookingLabel" aria-hidden="true"
                                          th:if="${successMessage}">
