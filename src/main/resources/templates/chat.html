@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head"></head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_player/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/master_player/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <div class="chat-container">
+                            <h2 class="text-center">🌦️ Trò chuyện với Weather AI 🌦️</h2>
+
+                            <div id="chat-box" class="mb-4">
+                                <div class="bot-message">Xin chào! Bạn muốn xem thời tiết ở đâu và ngày nào? 📅</div>
+
+                                <div class="user-input">
+                                    <form id="weather-form" th:action="@{/weather/forecast}" method="post" class="d-flex flex-column">
+                                        <input type="text" name="city" placeholder="Nhập tên thành phố..." required class="mb-2">
+                                        <input type="date" name="date" required class="mb-2">
+                                        <button type="submit" class="btn btn-primary">Dự báo</button>
+                                    </form>
+                                </div>
+
+                                <div id="loading" style="display:none;" class="text-center">⏳ Đang tìm kiếm dự báo thời tiết...</div>
+
+                                <div th:if="${weather != null}">
+                                    <div class="bot-message">
+                                        📅 <strong th:text="${#temporals.format(weather.date, 'dd/MM/yyyy')}"></strong><br>
+                                        🌡️ Nhiệt độ trung bình: <strong th:text="${weather.temperature}"></strong> °C<br>
+                                        🌤️ Thời tiết: <strong th:text="${weather.weatherDescription}"></strong><br>
+                                        🤖 Gợi ý: <strong th:text="${weather.aiSuggestion}"></strong>
+                                    </div>
+                                </div>
+
+                                <div th:if="${error != null}">
+                                    <div class="bot-message error" th:text="${error}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div th:replace="master/master_player/footer::footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('weather-form');
+    const loading = document.getElementById('loading');
+
+    form.addEventListener('submit', function() {
+        loading.style.display = 'block';
+    });
+</script>
+</body>
+</html>

@@ -279,6 +279,7 @@
     <!-- FORM ĐĂNG KÝ -->
     <div class="form-container sign-up-container">
         <form th:action="@{/register}" th:object="${user}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <h1>Create Account</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -297,6 +298,7 @@
     <!-- FORM ĐĂNG NHẬP -->
     <div class="form-container sign-in-container">
         <form th:action="@{/login}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <h1>Sign in</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>

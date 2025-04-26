@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import uth.edu.jpa.models.SanPham;
 
 @Repository
-public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
+public interface SanPhamRepository extends JpaRepository<SanPham, Long> {
 }

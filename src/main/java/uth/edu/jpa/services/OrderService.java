@@ -24,8 +24,11 @@ public class OrderService {
     }
 
     // Lấy đơn hàng theo ID
-    public Optional<Order> getOrderById(Long id) {
-        return orderRepository.findById(id);
+//    public Optional<Order> getOrderById(Long id) {
+//        return orderRepository.findById(id);
+//    }
+    public Order getOrderById(Long id) {
+        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
     // Lưu đơn hàng
@@ -36,5 +39,10 @@ public class OrderService {
     // Xóa đơn hàng
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
+    }
+
+
+    public List<Order> getRecentOrders() {
+        return orderRepository.findTop10ByOrderByCreatedAtDesc();
     }
 }

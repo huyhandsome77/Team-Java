@@ -2,6 +2,9 @@ package uth.edu.jpa.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "QuanLySan")
 public class QLSModel {
@@ -19,6 +22,23 @@ public class QLSModel {
 
     @Column(name = "status")
     private String status;
+
+    @OneToMany(mappedBy = "court", cascade = CascadeType.ALL)
+    private List<DanhGia> danhGias = new ArrayList<>();
+
+    public List<DanhGia> getDanhGias() {
+        return danhGias;
+    }
+
+    public void setDanhGias(List<DanhGia> danhGias) {
+        this.danhGias = danhGias;
+    }
+
+    public double getDiemTrungBinh() {
+        if (danhGias == null || danhGias.isEmpty()) return 0;
+        return danhGias.stream().mapToInt(DanhGia::getSoSao).average().orElse(0);
+    }
+
 
     public Long getCourtId() {
         return courtId;
@@ -62,6 +82,9 @@ public class QLSModel {
         this.courtName = courtName;
         this.status = status;
         this.rentalPrice = rentalPrice;
+    }
+    public String getName() {
+        return courtName;
     }
 
     // Getters and Setters
