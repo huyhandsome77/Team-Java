@@ -39,8 +39,7 @@ public class SecurityConfig {
                         .successHandler(customSuccessHandler)
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll())
-                .csrf(csrf -> csrf.disable());
+                .logout(logout -> logout.permitAll());
         return http.build();
     }
     @Bean
