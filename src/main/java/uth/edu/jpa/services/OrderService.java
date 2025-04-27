@@ -3,6 +3,7 @@ package uth.edu.jpa.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uth.edu.jpa.models.Order;
+import uth.edu.jpa.models.User;
 import uth.edu.jpa.repositories.OrderRepository;
 
 import java.util.List;
@@ -54,4 +55,13 @@ public class OrderService {
     public List<Order> getRecentOrders() {
         return orderRepository.findTop10ByOrderByCreatedAtDesc();
     }
+    public List<Order> getOrderHistory(User user) {
+        return orderRepository.findByUser(user);
+    }
+    public Optional<Order> findOrderById(Long id) {
+        return orderRepository.findById(id);
+    }
+
+
+
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="master/head::head">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <div th:replace="master/master_player/menu::menu"></div>
+        <div class="layout-page">
+            <div th:replace="master/master_player/navbar::navbar"></div>
+            <div class="content-wrapper">
+                <!-- Content -->
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <th:block th:fragment="content">
+                        <style>
+                            .table thead th {
+                                background-color: #000066;
+                                color: white;
+                            }
+                            .table tbody tr:nth-child(odd) {
+                                background-color: #f8f9fa;
+                            }
+                            .table tbody tr:nth-child(even) {
+                                background-color: #ffffff;
+                            }
+                        </style>
+
+                        <div class="container mt-5">
+                            <h1>Chi tiết đơn hàng</h1>
+                            <p><strong>Đơn hàng ID:</strong> <span th:text="${order.id}"></span></p>
+                            <p><strong>Tổng số tiền:</strong> <span th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 3, 'POINT')} + ' VND'"></span></p>
+                            <p><strong>Ngày thanh toán:</strong> <span th:text="${order.payDate}"></span></p>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="item : ${orderItems}">
+                                        <td th:text="${item.sanPham.tenSanPham}"></td>
+                                        <td th:text="${item.soLuong}"></td>
+                                        <td th:text="${#numbers.formatDecimal(item.thanhTien, 0, 'COMMA', 3, 'POINT')} + ' VND'"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </th:block>
+                </div>
+                <!-- / Content -->
+
+                <!-- Footer -->
+                <div th:replace="master/master_player/footer::footer"></div>
+                <!-- / Footer -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

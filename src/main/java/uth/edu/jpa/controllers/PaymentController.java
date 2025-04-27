@@ -18,6 +18,10 @@ import uth.edu.jpa.services.CartService;
 import uth.edu.jpa.services.OrderService;
 import uth.edu.jpa.services.VnPayService;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Controller
 public class PaymentController {
@@ -83,24 +87,32 @@ public class PaymentController {
                 order.setDeliveryAddress(delivery);
                 order.setBankCode(vnp_TxnRef);
                 order.setStatus(Order.OrderStatus. PENDING);
-                orderService.saveOrder(order);
+                order.setPayDate(LocalDateTime.now());
+
 
 
                 // Lấy giỏ hàng hiện tại và giảm số lượng sp khi tt thành công
                 Cart userCart = cartService.getCartByUser(user);
                 if (userCart != null && userCart.getItems() != null) {
+                    List<OrderItem> orderItems = new ArrayList<>();
                     for (CartItemEntity cartItem : userCart.getItems()) {
                         SanPham sanPham = cartItem.getSanPham();
                         int soLuong = cartItem.getSoLuong();
 
-                        // Trừ tồn kho
-                        int tonKhoMoi = sanPham.getTonKho() - soLuong;
-                        if (tonKhoMoi < 0) tonKhoMoi = 0;
-                        sanPham.setTonKho(tonKhoMoi);
-                        sanPhamRepository.save(sanPham); // cập nhật lại vào DB
+                        // Cập nhật tồn kho
+                        updateStock(sanPham, soLuong);
+
+                        // Thêm vào danh sách OrderItem
+                        OrderItem orderItem = new OrderItem();
+                        orderItem.setOrder(order);
+                        orderItem.setSanPham(sanPham);
+                        orderItem.setSoLuong(soLuong);
+                        orderItems.add(orderItem);
                     }
+                    order.setOrderItems(orderItems);
                 }
 
+                orderService.saveOrder(order);
 
                 // Xóa giỏ hàng và session
                 cartService.clearCart(user);
@@ -119,6 +131,16 @@ public class PaymentController {
             redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi xử lý thanh toán.");
             return "redirect:/cart";
         }
+    }
+
+    private void updateStock(SanPham sanPham, int soLuong) {
+        // Kiểm tra tồn kho và trừ đi số lượng sản phẩm đã mua
+        int tonKhoMoi = sanPham.getTonKho() - soLuong;
+        if (tonKhoMoi < 0) {
+            tonKhoMoi = 0; // Nếu tồn kho không đủ, set về 0
+        }
+        sanPham.setTonKho(tonKhoMoi);
+        sanPhamRepository.save(sanPham); // Cập nhật lại vào DB
     }
 
 }

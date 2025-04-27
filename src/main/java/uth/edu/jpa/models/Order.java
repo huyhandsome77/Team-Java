@@ -1,6 +1,7 @@
 package uth.edu.jpa.models;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders") // It's good practice to specify the table name
@@ -13,8 +14,15 @@ public class Order {
     private double totalAmount;
     private LocalDateTime createdAt;
     private String bankCode;
-    private String payDate;
+    private LocalDateTime payDate;
     private OrderStatus status;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
 
     public enum OrderStatus {
         PENDING,
@@ -85,11 +93,15 @@ public class Order {
         this.bankCode = bankCode;
     }
 
-    public String getPayDate() {
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public LocalDateTime getPayDate() {
         return payDate;
     }
 
-    public void setPayDate(String payDate) {
+    public void setPayDate(LocalDateTime payDate) {
         this.payDate = payDate;
     }
 
@@ -107,5 +119,9 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 }

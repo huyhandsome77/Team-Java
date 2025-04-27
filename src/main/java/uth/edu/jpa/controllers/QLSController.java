@@ -33,12 +33,12 @@ public class QLSController {
     private UserRepository userRepository;
     @Autowired
     private QLSRepository qlsRepository;
-   @Autowired
-   private BookingRepository bookingRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
     @Autowired
     private BookingService bookingService;
-@Autowired
-private OrderService OrderService;
+    @Autowired
+    private OrderService OrderService;
     @ModelAttribute("court")
     public QLSModel getCourtModel() {
         return new QLSModel();

@@ -29,7 +29,8 @@
                             <td th:text="${booking.court.name}"></td>
                             <td th:text="${#temporals.format(booking.startTime, 'HH:mm')} + ' - ' + ${#temporals.format(booking.endTime, 'HH:mm')}"></td>
 
-                            <td th:text="${booking.status}"></td>
+                            <td th:text="${booking.status}" th:classappend="${booking.status == 'Đã duyệt' ? 'text-success' : (booking.status == 'Từ chối' ? 'text-danger' : '')}"
+                                style="font-size: 1rem;">
                             <td>
                                 <div class="d-flex gap-2 justify-content-center">
                                     <form th:action="@{/Booking/approve}" method="post" class="mb-0">

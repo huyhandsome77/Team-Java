@@ -2,6 +2,7 @@ package uth.edu.jpa.controllers;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import uth.edu.jpa.models.*;
 import uth.edu.jpa.repositories.*;
 import uth.edu.jpa.services.BookingService;
 import uth.edu.jpa.services.CartService;
+import uth.edu.jpa.services.OrderService;
+
 
 
 import java.util.List;
@@ -38,6 +41,9 @@ public class PlayerController {
 
     @Autowired
     private DanhGiaRepository danhGiaRepository;
+
+    @Autowired
+    private OrderService orderService;
 
 
     @GetMapping("/home")
@@ -147,6 +153,14 @@ public class PlayerController {
             return cartService.getTotalQuantity(user);
         }
         return 0;
+    }
+
+    @GetMapping("/order-history")
+    public String viewOrderHistory(Model model) {
+        User currentUser = SecurityUtils.getCurrentUser();
+        List<Order> orders = orderService.getOrderHistory(currentUser);
+        model.addAttribute("orders", orders);
+        return "player/Player_OrderHistory";  // Trả về view hiển thị lịch sử đơn hàng
     }
 }
 
