@@ -3,10 +3,9 @@
 <head th:replace="master/head::head">
     <link rel="stylesheet" th:href="@{/assets/bootstrap/css/bootstrap.min.css}">
     <style>
-        .chat-box { border: 1px solid #ddd; border-radius: 5px; padding: 15px; height: 400px; overflow-y: scroll; }
-        .chat-message { margin-bottom: 15px; }
-        .chat-message-time { font-size: 0.9rem; color: gray; text-align: center; margin-bottom: 5px; }
-        .message-content { font-size: 1.1rem; margin-top: 5px; }
+        .support-request { margin-bottom: 10px; }
+        .support-request .resolved { color: green; }
+        .support-request .pending { color: red; }
     </style>
 </head>
 <body>
@@ -14,56 +13,41 @@
     <div class="layout-container">
         <div th:replace="QuanLySan/includes/menu_QLS::menu"></div>
         <div class="layout-page">
-            <div class="content-wrapper">
-                <!-- Content -->
 
+            <div class="content-wrapper">
                 <div class="container-xxl flex-grow-1 container-p-y">
                     <th:block th:fragment="content">
-                        <div class="container ">
-                            <div class="row">
-                                <!-- Cột trái: Danh sách yêu cầu hỗ trợ -->
-                                <div class="col-md-3">
-                                    <h4 class="mb-3">Danh sách tin nhắn</h4>
-                                    <ul class="list-group">
-                                        <li th:each="req : ${requests}" class="list-group-item d-flex justify-content-between align-items-center" th:id="'message-' + ${req.supportid}">
-                                            <div>
-                                                <strong th:text="${req.name}"></strong> -
-                                                <span th:text="${req.resolved ? 'Đã xử lý' : 'Chưa xử lý'}" th:classappend="${req.resolved ? 'text-success' : 'text-danger'}"></span>
-                                            </div>
-                                            <div>
-                                                <a th:href="@{'/support/chat/' + ${req.supportid}}" class="btn btn-sm btn-info">Xem</a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                                <!-- Cột phải: Chi tiết chat -->
-                                <div class="col-md-9">
-                                    <h4 class="mb-3">Chi tiết yêu cầu</h4>
-                                    <div class="chat-box" th:if="${chat != null}">
-                                        <div class="chat-message">
-                                            <div class="chat-message-time" th:text="${#temporals.format(chat.createdAt, 'dd/MM/yyyy HH:mm')}"></div>
-                                            <div class="message-content">
-                                                <strong th:text="${chat.email}"></strong><br/>
-                                                <strong th:text="${chat.subject}"></strong><br/>
-                                                <div th:text="${chat.message}"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div th:if="${chat == null}" class="alert alert-warning">
-                                        Vui lòng chọn một yêu cầu để xem chi tiết.
-                                    </div>
-                                </div>
+                        <div class="container">
+                            <h4 class="mb-3">Danh sách yêu cầu hỗ trợ</h4>
+                            <div th:if="${error}" class="alert alert-danger">
+                                <p th:text="${error}"></p>
                             </div>
+                            <ul class="list-group">
+                                <li th:each="req : ${requests}" class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="support-request">
+                                        <strong th:text="${req.ten}"></strong> -
+                                        <span th:text="${req.email}"></span><br/>
+                                        <span th:text="${req.sdt}"></span><br/>
+                                        <span th:text="${req.tinNhan}"></span><br/>
+                                        <span th:text="${#temporals.format(req.thoiGianLienHe, 'dd/MM/yyyy HH:mm')}"></span><br/>
+                                        <span th:class="${req.resolved ? 'resolved' : 'pending'}" th:text="${req.resolved ? 'Đã xử lý' : 'Chưa xử lý'}"></span>
+                                    </div>
+                                    <div>
+                                        <form th:action="@{/Support/resolve/{id}(id=${req.id})}" method="post" style="display: inline;">
+                                            <input type="submit" class="btn btn-sm btn-success" value="Đánh dấu đã xử lý" th:if="${!req.resolved}" />
+                                        </form>
+
+                                        <form th:action="@{/Support/delete/{id}(id=${req.id})}" method="post" style="display: inline;">
+                                            <input type="submit" class="btn btn-sm btn-danger" value="Xóa" th:if="${req.resolved}" />
+                                        </form>
+
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
                     </th:block>
                 </div>
-                <!-- / Content -->
-
-                <!-- Footer -->
                 <div th:replace="QuanLySan/includes/footer_QLS::footer"></div>
-                <!-- / Footer -->
-
                 <div class="content-backdrop fade"></div>
             </div>
         </div>
