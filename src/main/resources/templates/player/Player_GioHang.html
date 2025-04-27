@@ -47,7 +47,6 @@
                                             </td>
                                             <td class="text-center">
                                                 <form th:action="@{/cart/update/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post" class="d-flex flex-column align-items-center">
-
                                                     <input class="form-control form-control-sm text-center" style="width: 80px;" min="1" name="quantity" type="number" th:value="${item.soLuong}"/>
                                                     <button class="btn btn-sm btn-secondary mt-2" type="submit">Cập nhật</button>
                                                 </form>
@@ -57,7 +56,6 @@
                                             </td>
                                             <td>
                                                 <form th:action="@{/cart/remove/{sanPhamId}(sanPhamId=${item.sanPham.maSanPham})}" method="post">
-
                                                     <button class="btn btn-sm btn-danger" title="Xoá sản phẩm" type="submit">
                                                         <i class="bi bi-trash"></i> Xoá
                                                     </button>
@@ -89,7 +87,6 @@
                                 <span class="close-btn" onclick="closePopup()">&times;</span>
                                 <h3 class="popup-title">Thông tin nhận hàng</h3>
                                 <form th:action="@{/cart/checkout}" method="post">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                     <div class="form-group">
                                         <label for="fullname">Họ tên</label>
                                         <input type="text" id="fullname" name="fullname" placeholder="Nguyễn Văn A" required>
@@ -208,6 +205,5 @@
 </div>
 <script crossorigin="anonymous" integrity="sha384-QFh6fZ6X+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q+6Q5Q" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-<script th:replace="master/hoaroi::hoaroi"></script>
 </body>
 </html>
