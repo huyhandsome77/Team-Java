@@ -90,6 +90,7 @@ public class PlayerController {
         booking.setUser(user);
         booking.setTotalPrice(totalPrice);
         booking.setCourt(court);
+        booking.setStatus("Chờ duyệt");
         bookingService.save(booking);
         redirectAttributes.addFlashAttribute("successMessage", "Bạn đã đặt sân thành công!");
         return "redirect:/player/datsan?success=true";

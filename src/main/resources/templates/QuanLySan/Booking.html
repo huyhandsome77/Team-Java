@@ -10,38 +10,42 @@
 
             <div class="content-wrapper">
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <th:block th:fragment="content">
+                    <table class="table table-bordered bg-white">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Khách hàng</th>
+                            <th>Sân</th>
+                            <th>Thời gian</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                            <table class="table table-bordered bg-white">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Khách hàng</th>
-                                    <th>Sân</th>
-                                    <th>Thời gian</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="request, iterStat : ${bookingRequests}">
-                                    <td th:text="${iterStat.index + 1}"></td>
-                                    <td th:text="${request.customerName}"></td>
-                                    <td th:text="${request.courtName}"></td>
-                                    <td th:text="${request.bookingTime}"></td>
-                                    <td>
-                                            <span th:classappend="${request.status == 'Chờ duyệt' ? 'text-warning' : (request.status == 'Đã duyệt' ? 'text-success' : 'text-danger')}"
-                                                  th:text="${request.status}"></span>
-                                    </td>
-                                    <td>
-                                        <a href="#" th:if="${request.status == 'Chờ duyệt'}" class="btn btn-success btn-sm">Phê duyệt</a>
-                                        <a href="#" th:if="${request.status == 'Chờ duyệt'}" class="btn btn-danger btn-sm">Từ chối</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <tr th:each="booking, iterStat : ${bookings}">
+                            <td th:text="${iterStat.index + 1}"></td>
+                            <td th:text="${booking.fullName}"></td>
+                            <td th:text="${booking.court.name}"></td>
+                            <td th:text="${#temporals.format(booking.startTime, 'HH:mm')} + ' - ' + ${#temporals.format(booking.endTime, 'HH:mm')}"></td>
 
-                    </th:block>
+                            <td th:text="${booking.status}"></td>
+                            <td>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <form th:action="@{/Booking/approve}" method="post" class="mb-0">
+                                        <input type="hidden" th:value="${booking.id}" name="bookingId"/>
+                                        <button type="submit" th:if="${booking.status == 'Chờ duyệt'}" class="btn btn-success btn-sm" style="font-size: 1rem;">Phê duyệt</button>
+                                    </form>
+                                    <form th:action="@{/Booking/deny}" method="post" class="mb-0">
+                                        <input type="hidden" th:value="${booking.id}" name="bookingId"/>
+                                        <button type="submit" th:if="${booking.status == 'Chờ duyệt'}" class="btn btn-danger btn-sm" style="font-size: 1rem;">Từ chối</button>
+                                    </form>
+                                </div>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div th:replace="QuanLySan/includes/footer_QLS::footer"></div>
                 <div class="content-backdrop fade"></div>

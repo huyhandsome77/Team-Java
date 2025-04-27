@@ -13,6 +13,15 @@ public class BookingRequest {
     private String phoneNumber;
     private LocalDate bookingDate;
     private LocalTime startTime;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Long getCourtId() {
         return courtId;
@@ -72,4 +81,5 @@ public class BookingRequest {
 
     private LocalTime endTime;
     private String note;
+
 }

@@ -21,7 +21,7 @@ public class AdminController {
     private UserRepository userRepository;
 
     @Autowired
-    private OrderService orderService;
+    private OrderService OrderService;
     @Autowired
     private BookingService bookingService;
 
@@ -36,7 +36,9 @@ public class AdminController {
     public String adminQuanlybanhang(Model model) {
         List<SanPham> danhSachSanPham = sanPhamService.findAll();  // Lấy danh sách sản phẩm từ service
         model.addAttribute("sanPhamList", danhSachSanPham);  // Thêm danh sách sản phẩm vào model
-        List<Order> orders = orderService.getAllOrders(); // hoặc theo user nếu cần
+        List<Order> orders = OrderService.getAllOrders();
+        double TongTien = OrderService.getTotalRevenue();
+        model.addAttribute("TongTien", TongTien);
         model.addAttribute("orders", orders);
         return "admin/admin_salesmanagement";  // Trả về view
     }
@@ -49,5 +51,6 @@ public class AdminController {
 
 
 }
+
 
 

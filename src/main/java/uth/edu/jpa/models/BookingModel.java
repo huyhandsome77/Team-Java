@@ -44,6 +44,16 @@ public class BookingModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "court_id", nullable = false)
     private QLSModel court;
+    @Column(name = "status", nullable = false)
+    private String status;  // Trạng thái của booking
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     // Constructors
     public BookingModel() {}

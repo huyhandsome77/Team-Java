@@ -9,20 +9,20 @@
             <div class="content-wrapper">
                 <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <th:block th:fragment="content">
+
                         <h2 class="text-center">Thống Kê Doanh Thu</h2>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card p-3">
                                     <h5>Doanh thu tổng</h5>
-                                    <p class="fs-3 text-primary">$45,000</p>
+                                    <h3 class="text-success" th:text="${#numbers.formatInteger(TongTien, 0, 'COMMA')} + ' VND'">0 VND</h3>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="card p-3">
                                     <h5>Số lượt đặt sân</h5>
-                                    <p class="fs-3 text-success">320</p>
+                                    <p class="fs-3 text-success" th:text="${SanDat}">0</p>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </th:block>
+
                 </div>
                 <!-- / Content -->
                 <!-- Footer -->

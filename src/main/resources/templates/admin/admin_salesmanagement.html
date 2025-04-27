@@ -113,7 +113,8 @@
                                                 <i class="fas fa-dollar-sign"></i>
                                             </div>
                                             <h5 class="card-title">Doanh thu | Tháng này</h5>
-                                            <h2>$3,264</h2>
+                                            <h2 class="text-success" th:text="${#numbers.formatInteger(TongTien, 0, 'COMMA')} + ' VND'">0 VND</h2>
+
                                             <p class="increase">+8% tăng</p>
                                         </div>
                                     </div>

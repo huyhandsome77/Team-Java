@@ -13,136 +13,136 @@
             <div th:replace="QuanLySan/includes/navbar_QLS::navbar"></div>
             <div class="content-wrapper">
                 <div class="container-xxl flex-grow-1 container-y">
-                    <div class="container mt-2">
-                        <div class="d-flex justify-content-end mb-3 mt-4 gap-2">
-                            <a  href="/History" class="btn btn-secondary">Lịch sử</a>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourtModal">
-                                Thêm sân mới
-                            </button>
+                        <div class="container mt-2">
+                            <div class="d-flex justify-content-end mb-3 mt-4 gap-2">
+                                <a  href="/History" class="btn btn-secondary">Lịch sử</a>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourtModal">
+                                     Thêm sân mới
+                                </button>
 
-                        </div>
-                        <div class="row row-cols-1 row-cols-md-3 g-4">
-                            <div class="col" th:each="san : ${dsSan}">
-                                <div class="card h-100">
-                                    <img th:src="${san.image}" class="card-img-top" alt="Hình ảnh sân">
-                                    <div class="card-body">
-                                        <h5 class="card-title" th:text="${san.courtName}">Tên sân</h5>
-                                        <p class="card-text">
-                                            Trạng thái:
-                                            <span th:text="${san.status}" th:classappend="${san.status == 'Hoạt động'} ? 'text-success fw-bold' : (${san.status == 'Không hoạt động'} ? 'text-danger fw-bold' : 'text-warning fw-bold' )"></span>
-                                        </p>
-                                        <p class="card-text">
-                                            Giá thuê: <span class="fw-bold" th:text="${#numbers.formatDecimal(san.rentalPrice, 0, 'COMMA', 0, 'POINT')}"></span> VND
-                                        </p>
-                                        <a href="#" class="btn btn-warning" th:attr="data-bs-toggle='modal',  data-bs-target='#editStatusModal__' + ${san.courtId}">Cập nhật trạng thái</a>
+                            </div>
+                            <div class="row row-cols-1 row-cols-md-3 g-4">
+                                <div class="col" th:each="san : ${dsSan}">
+                                    <div class="card h-100">
+                                        <img th:src="${san.image}" class="card-img-top" alt="Hình ảnh sân">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${san.courtName}">Tên sân</h5>
+                                            <p class="card-text">
+                                                Trạng thái:
+                                                <span th:text="${san.status}" th:classappend="${san.status == 'Hoạt động'} ? 'text-success fw-bold' : (${san.status == 'Không hoạt động'} ? 'text-danger fw-bold' : 'text-warning fw-bold' )"></span>
+                                            </p>
+                                            <p class="card-text">
+                                                Giá thuê: <span class="fw-bold" th:text="${#numbers.formatDecimal(san.rentalPrice, 0, 'COMMA', 0, 'POINT')}"></span> VND
+                                            </p>
+                                            <a href="#" class="btn btn-warning" th:attr="data-bs-toggle='modal',  data-bs-target='#editStatusModal__' + ${san.courtId}">Cập nhật trạng thái</a>
 
-                                        <button type="button"
-                                                class="btn btn-danger"
-                                                data-bs-toggle="modal"
-                                                th:attr="data-bs-target='#deleteCourtModal__' + ${san.courtId}">
-                                            Xóa
-                                        </button>
+                                            <button type="button"
+                                                    class="btn btn-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:attr="data-bs-target='#deleteCourtModal__' + ${san.courtId}">
+                                                Xóa
+                                            </button>
 
+                                        </div>
+                                    </div>
+                                    <!-- Modal Cập nhật trạng thái -->
+                                    <div class="modal fade" th:id="'editStatusModal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <form th:action="@{'/edit/' + ${san.courtId}}" method="post">
+                                                    <div class="modal-header text-white">
+                                                        <h5 class="modal-title">Cập nhật trạng thái sân</h5>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Chọn trạng thái:</label>
+                                                            <select class="form-select" name="status">
+                                                                <option value="Hoạt động" th:selected="${san.status == 'Hoạt động'}">Hoạt động</option>
+                                                                <option value="Không hoạt động" th:selected="${san.status == 'Không hoạt động'}">Không hoạt động</option>
+                                                                <option value="Bảo trì" th:selected="${san.status == 'Bảo trì'}">Bảo trì</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Giá sân:</label>
+                                                            <input type="number" step="0.01" class="form-control" name="price"
+                                                                   th:value="${san.rentalPrice % 1 == 0 ? san.rentalPrice.intValue() : san.rentalPrice}" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer d-flex justify-content-end gap-2">
+                                                        <button type="submit" class="btn btn-success">Lưu</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Modal xác nhận xóa sân -->
+                                    <div class="modal fade"  th:id="'deleteCourtModal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header text-white ">
+                                                    <h4 class="modal-title">Xác nhận xóa</h4>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <p>Bạn có chắc chắn muốn <strong>xóa</strong> "<span th:text="${san.courtName}"></span>" không?</p>
+                                                </div>
+                                                <div class="modal-footer d-flex justify-content-end gap-2">
+                                                    <a th:href="@{'/delete/' + ${san.courtId}}" class="btn btn-danger">Xóa</a>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- Modal Cập nhật trạng thái -->
-                                <div class="modal fade" th:id="'editStatusModal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
+                            </div>
+
+                                <!-- Modal Thêm Sân -->
+                                <div class="modal fade" id="addCourtModal" tabindex="-1" aria-labelledby="addCourtModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
                                         <div class="modal-content">
-                                            <form th:action="@{'/edit/' + ${san.courtId}}" method="post">
-                                                <div class="modal-header text-white">
-                                                    <h5 class="modal-title">Cập nhật trạng thái sân</h5>
+                                            <form th:action="@{/add}" th:object="${court}" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="addCourtModalLabel">Thêm sân mới</h5>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="mb-3">
-                                                        <label class="form-label">Chọn trạng thái:</label>
-                                                        <select class="form-select" name="status">
-                                                            <option value="Hoạt động" th:selected="${san.status == 'Hoạt động'}">Hoạt động</option>
-                                                            <option value="Không hoạt động" th:selected="${san.status == 'Không hoạt động'}">Không hoạt động</option>
-                                                            <option value="Bảo trì" th:selected="${san.status == 'Bảo trì'}">Bảo trì</option>
-                                                        </select>
+                                                        <label class="form-label">Tên sân</label>
+                                                        <input type="text" class="form-control" th:field="*{courtName}" required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Chọn ảnh</label>
+                                                        <input type="file" class="form-control" name="imageFile" accept="image/*" required>
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="form-label">Giá sân:</label>
-                                                        <input type="number" step="0.01" class="form-control" name="price"
-                                                               th:value="${san.rentalPrice % 1 == 0 ? san.rentalPrice.intValue() : san.rentalPrice}" required>
+                                                        <label class="form-label">Giá thuê (VND)</label>
+                                                        <input type="number" class="form-control" name="rentalPrice" placeholder="Nhập giá thuê" required>
+
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Trạng thái</label>
+                                                        <select class="form-select" th:field="*{status}">
+                                                            <option value="Hoạt động">Hoạt động</option>
+                                                            <option value="Không hoạt động">Không hoạt động</option>
+                                                            <option value="Bảo trì">Bảo trì</option>
+                                                        </select>
+                                                    </div>
+
                                                 </div>
                                                 <div class="modal-footer d-flex justify-content-end gap-2">
                                                     <button type="submit" class="btn btn-success">Lưu</button>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Hủy</button>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
 
-
-                                <!-- Modal xác nhận xóa sân -->
-                                <div class="modal fade"  th:id="'deleteCourtModal__' + ${san.courtId}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header text-white ">
-                                                <h4 class="modal-title">Xác nhận xóa</h4>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <p>Bạn có chắc chắn muốn <strong>xóa</strong> "<span th:text="${san.courtName}"></span>" không?</p>
-                                            </div>
-                                            <div class="modal-footer d-flex justify-content-end gap-2">
-                                                <a th:href="@{'/delete/' + ${san.courtId}}" class="btn btn-danger">Xóa</a>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
-                        <!-- Modal Thêm Sân -->
-                        <div class="modal fade" id="addCourtModal" tabindex="-1" aria-labelledby="addCourtModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form th:action="@{/add}" th:object="${court}" method="post" enctype="multipart/form-data">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="addCourtModalLabel">Thêm sân mới</h5>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <label class="form-label">Tên sân</label>
-                                                <input type="text" class="form-control" th:field="*{courtName}" required>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Chọn ảnh</label>
-                                                <input type="file" class="form-control" name="imageFile" accept="image/*" required>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label">Giá thuê (VND)</label>
-                                                <input type="number" class="form-control" name="rentalPrice" placeholder="Nhập giá thuê" required>
-
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Trạng thái</label>
-                                                <select class="form-select" th:field="*{status}">
-                                                    <option value="Hoạt động">Hoạt động</option>
-                                                    <option value="Không hoạt động">Không hoạt động</option>
-                                                    <option value="Bảo trì">Bảo trì</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                        <div class="modal-footer d-flex justify-content-end gap-2">
-                                            <button type="submit" class="btn btn-success">Lưu</button>
-                                            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Hủy</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
                 <div th:replace="QuanLySan/includes/footer_QLS::footer"></div>
                 <div class="content-backdrop fade"></div>

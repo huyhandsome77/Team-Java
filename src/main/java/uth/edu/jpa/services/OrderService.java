@@ -22,8 +22,20 @@ public class OrderService {
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+    public double getTotalRevenue() {
+        List<Order> orders = orderRepository.findAll();
+        double totalRevenue = 0;
+        for (Order order : orders) {
+            totalRevenue += order.getTotalAmount();
+        }
+        return totalRevenue;
+    }
 
 
+    // Lấy đơn hàng theo ID
+//    public Optional<Order> getOrderById(Long id) {
+//        return orderRepository.findById(id);
+//    }
     public Order getOrderById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
     }

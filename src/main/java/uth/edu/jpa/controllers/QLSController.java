@@ -13,10 +13,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import uth.edu.jpa.models.User;
@@ -25,6 +24,7 @@ import uth.edu.jpa.repositories.BookingRepository;
 import uth.edu.jpa.repositories.QLSRepository;
 import uth.edu.jpa.repositories.UserRepository;
 import uth.edu.jpa.services.BookingService;
+import uth.edu.jpa.services.OrderService;
 
 @Controller
 
@@ -33,9 +33,12 @@ public class QLSController {
     private UserRepository userRepository;
     @Autowired
     private QLSRepository qlsRepository;
+   @Autowired
+   private BookingRepository bookingRepository;
     @Autowired
-    private BookingRepository bookingRepository;
-
+    private BookingService bookingService;
+@Autowired
+private OrderService OrderService;
     @ModelAttribute("court")
     public QLSModel getCourtModel() {
         return new QLSModel();
@@ -51,16 +54,31 @@ public class QLSController {
 
     @GetMapping("/Booking")
     public String BookingPage(Model model) {
+
+        List<BookingModel> bookings = bookingRepository.findAll();
+        model.addAttribute("bookings", bookings);
         return "QuanLySan/Booking";
     }
 
-    @PostMapping("/Booking/Confirm")
-    public String confirmBooking(@RequestParam("bookingId") Long bookingId) {
+
+
+    // Phê duyệt booking
+    @PostMapping("/Booking/approve")
+    public String approveBooking(@RequestParam("bookingId") Long bookingId) {
+        BookingModel booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setStatus("Đã duyệt");
+        bookingRepository.save(booking);
+
         return "redirect:/Booking";
     }
-
-    @PostMapping("/Booking/Cancel")
-    public String cancelBooking(@RequestParam("bookingId") Long bookingId) {
+    // Từ chối booking
+    @PostMapping("/Booking/deny")
+    public String denyBooking(@RequestParam("bookingId") Long bookingId) {
+        BookingModel booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        booking.setStatus("Từ chối");
+        bookingRepository.save(booking);
         return "redirect:/Booking";
     }
 
@@ -85,7 +103,12 @@ public class QLSController {
     public String SupportPage() { return "QuanLySan/Support"; }
 
     @GetMapping("/Chart")
-    public String ChartPage() { return "QuanLySan/Chart"; }
+    public String ChartPage(Model model) {
+        long soSanDaDat = bookingService.getTotalBookings();
+        model.addAttribute("SanDat", soSanDaDat);
+        double TongTien = OrderService.getTotalRevenue();
+        model.addAttribute("TongTien", TongTien);
+        return "QuanLySan/Chart"; }
 
     @GetMapping("/list")
     public String showCourts(Model model) {
@@ -157,4 +180,5 @@ public class QLSController {
 
 
 }
+
 
