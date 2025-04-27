@@ -12,9 +12,10 @@ public class Cart {
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "user_userid", unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<CartItemEntity> items = new ArrayList<>();
 
     public void addItem(CartItemEntity item) {

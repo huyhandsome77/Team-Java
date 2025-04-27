@@ -25,9 +25,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/home",        // ✅ Trang public
+                                "/home",
                                 "/register",
-                                "/css/**",      // Cho phép load static resource
+                                "/css/**",
                                 "/js/**",
                                 "/images/**",
                                 "/webjars/**"
@@ -39,8 +39,7 @@ public class SecurityConfig {
                         .successHandler(customSuccessHandler)
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll())
-                .csrf(csrf -> csrf.disable());
+                .logout(logout -> logout.permitAll());
         return http.build();
     }
     @Bean

@@ -25,6 +25,7 @@ import uth.edu.jpa.repositories.BookingRepository;
 import uth.edu.jpa.repositories.QLSRepository;
 import uth.edu.jpa.repositories.UserRepository;
 import uth.edu.jpa.services.BookingService;
+import uth.edu.jpa.services.OrderService;
 
 @Controller
 
@@ -35,7 +36,10 @@ public class QLSController {
     private QLSRepository qlsRepository;
    @Autowired
    private BookingRepository bookingRepository;
-
+    @Autowired
+    private BookingService bookingService;
+@Autowired
+private OrderService OrderService;
     @ModelAttribute("court")
     public QLSModel getCourtModel() {
         return new QLSModel();
@@ -85,7 +89,12 @@ public class QLSController {
     public String SupportPage() { return "QuanLySan/Support"; }
 
     @GetMapping("/Chart")
-    public String ChartPage() { return "QuanLySan/Chart"; }
+    public String ChartPage(Model model) {
+        long soSanDaDat = bookingService.getTotalBookings();
+        model.addAttribute("SanDat", soSanDaDat);
+        long TongTien = OrderService.getTotalOrders();
+        model.addAttribute("TongTien", TongTien);
+        return "QuanLySan/Chart"; }
 
     @GetMapping("/list")
     public String showCourts(Model model) {

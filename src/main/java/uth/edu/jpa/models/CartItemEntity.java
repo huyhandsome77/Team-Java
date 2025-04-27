@@ -10,9 +10,11 @@ public class CartItemEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @ManyToOne
+    @JoinColumn(name = "san_pham_ma_san_pham")
     private SanPham sanPham;
 
     private int soLuong;

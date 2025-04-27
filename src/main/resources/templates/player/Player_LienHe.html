@@ -57,37 +57,43 @@
                   <div class="card mt-3 shadow-sm">
                     <div class="card-body">
                       <h5 class="text-center fw-bold">GỬI PHẢN HỒI</h5>
-                      <form>
+                      <!-- Thông báo nếu có -->
+                      <div th:if="${thongBao}" class="alert alert-success text-center" role="alert">
+                        <span th:text="${thongBao}"></span>
+                      </div>
+
+                      <form th:action="@{/player/lienhe}" th:object="${lienHe}" method="post">
                         <div class="mb-3">
                           <label class="form-label" for="fullname">Họ và Tên</label>
                           <div class="input-group">
                             <span class="input-group-text"><i class="bx bx-user"></i></span>
-                            <input type="text" class="form-control" id="fullname" placeholder="Nguyễn Văn A">
+                            <input type="text" class="form-control" id="fullname" placeholder="Nguyễn Văn A" th:field="*{ten}">
                           </div>
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="email">Email</label>
                           <div class="input-group">
                             <span class="input-group-text"><i class="bx bx-envelope"></i></span>
-                            <input type="email" class="form-control" id="email" placeholder="email@example.com">
+                            <input type="email" class="form-control" id="email" placeholder="email@example.com" th:field="*{email}">
                           </div>
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="phone">Số điện thoại</label>
                           <div class="input-group">
                             <span class="input-group-text"><i class="bx bx-phone"></i></span>
-                            <input type="tel" class="form-control" id="phone" placeholder="0366.66.9999">
+                            <input type="tel" class="form-control" id="phone" placeholder="0366.66.9999" th:field="*{sdt}">
                           </div>
                         </div>
                         <div class="mb-3">
                           <label class="form-label" for="message">Tin nhắn</label>
                           <div class="input-group">
                             <span class="input-group-text"><i class="bx bx-comment"></i></span>
-                            <textarea class="form-control" id="message" rows="3" placeholder="Nhập tin nhắn của bạn..."></textarea>
+                            <textarea class="form-control" id="message" rows="3" placeholder="Nhập tin nhắn của bạn..." th:field="*{tinNhan}"></textarea>
                           </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Gửi thông tin</button>
                       </form>
+
                     </div>
                   </div>
                 </div>
@@ -129,7 +135,6 @@
     </div>
   </div>
 </div>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const elements = document.querySelectorAll(".fone, .email-blink");
